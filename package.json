@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@vitejs/plugin-react": "latest",
-    "ogl": "latest",
     "react": "latest",
     "react-dom": "latest",
     "vite": "latest"
