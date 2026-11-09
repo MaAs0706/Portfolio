@@ -98,6 +98,7 @@ const experiences = [
       "Leading a student community, coordinating initiatives and creating opportunities for debate and diplomacy.",
     category: "LEADERSHIP",
   },
+  
   {
     year: "2026",
     role: "Campus Director",
@@ -113,6 +114,30 @@ const experiences = [
     description:
       "Helping participants navigate ideas, technical challenges and the process of building projects.",
     category: "MENTORSHIP",
+  },
+  {
+    year: "2026",
+    role: "Hackathon Mentor",
+    organisation: "Useless Project 3.0",
+    description:
+      "Helping participants navigate ideas, technical challenges and the process of building projects.",
+    category: "MENTORSHIP",
+  },
+  {
+    year: "2026",
+    role: "Hackathon Mentor",
+    organisation: "MEC LABS 2026",
+    description:
+      "Helping participants navigate ideas, technical challenges and the process of building projects.",
+    category: "MENTORSHIP",
+  },
+  {
+    year: "2025",
+    role: "Events Head",
+    organisation: "MEC MUN Society",
+    description:
+      "Leading a student community, coordinating initiatives and creating opportunities for debate and diplomacy.",
+    category: "LEADERSHIP",
   },
   {
     year: "2025",
