@@ -2,6 +2,73 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Feather, BookOpen } from "lucide-react";
 import { articles, mediumProfile } from "../data/articles";
+import MediumArticles from "../components/MediumArticles";
+
+
+ function ManuscriptAnimation() {
+  const lines = [
+    "Some thoughts are never spoken.",
+    "Some feelings never find a name.",
+    "And some words...",
+    "are simply left on the page."
+  ];
+
+  return (
+    <div className="manuscript-scene">
+      <motion.div
+        className="manuscript"
+        initial={{ opacity: 0, y: 30, rotate: 3 }}
+        whileInView={{ opacity: 1, y: 0, rotate: -2 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+        animate={{ y: [0, -7, 0] }}
+      >
+        <span className="manuscript-label">
+          FRAGMENTS / NO. 001
+        </span>
+
+        <div className="manuscript-rule" />
+
+        <div className="manuscript-lines">
+          {lines.map((line, index) => (
+            <motion.p
+              key={line}
+              initial={{ opacity: 0, x: -8 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                delay: 0.8 + index * 0.65,
+                duration: 0.8
+              }}
+            >
+              {line}
+              {index === lines.length - 1 && (
+                <span className="ink-cursor" />
+              )}
+            </motion.p>
+          ))}
+        </div>
+
+        <div className="manuscript-footer">
+          <span>A THOUGHT, IN PASSING</span>
+          <span>AM — 001</span>
+        </div>
+      </motion.div>
+
+      <motion.span
+        className="manuscript-orbit"
+        animate={{ rotate: 360 }}
+        transition={{
+          duration: 35,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      >
+        WORDS · THOUGHTS · FRAGMENTS ·
+      </motion.span>
+    </div>
+  );
+}
 
 export default function Writing() {
   return (
@@ -34,65 +101,18 @@ export default function Writing() {
           MEDIUM <ArrowUpRight size={15} />
         </a>
       </div>
+      <section className="writing-archive">
+  <div className="panel-top">
+    <span>01 — THE ARCHIVE</span>
+    <span>WORDS PUBLISHED</span>
+  </div>
 
-      <div className="archive-toolbar">
-        <span>SELECTED WRITING</span>
-        <span>{String(articles.length).padStart(2, "0")} ENTRIES</span>
-      </div>
+  <MediumArticles />
+</section>
 
-      {articles.length > 0 ? (
-        <div className="article-list">
-          {articles.map((article, index) => (
-            <motion.a
-              key={article.id}
-              href={article.url}
-              target="_blank"
-              rel="noreferrer"
-              className="article-row"
-              initial={{ opacity: 0, y: 15 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.06 }}
-            >
-              <span className="article-number">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-
-              <div className="article-main">
-                <div className="article-meta">
-                  <span>{article.category}</span>
-                  <span>{article.date}</span>
-                </div>
-
-                <h2>{article.title}</h2>
-                <p>{article.excerpt}</p>
-
-                <span className="read-time">
-                  {article.readTime}
-                </span>
-              </div>
-
-              <ArrowUpRight className="article-arrow" />
-            </motion.a>
-          ))}
-        </div>
-      ) : (
-        <div className="writing-empty">
-          <BookOpen size={27} strokeWidth={1} />
-          <h2>The first page is waiting.</h2>
-          <p>
-            The collection is being assembled. In the
-            meantime, you can find my writing on Medium.
-          </p>
-          <a
-            href={mediumProfile}
-            target="_blank"
-            rel="noreferrer"
-          >
-            EXPLORE MY MEDIUM PROFILE <ArrowUpRight size={14}/>
-          </a>
-        </div>
-      )}
+      
+      
+    
     </main>
   );
 }
