@@ -1,91 +1,31 @@
 
-import { motion } from "framer-motion";
 import { ArrowUpRight, Feather, BookOpen } from "lucide-react";
-import { articles, mediumProfile } from "../data/articles";
 import MediumArticles from "../components/MediumArticles";
-
-
- function ManuscriptAnimation() {
-  const lines = [
-    "Some thoughts are never spoken.",
-    "Some feelings never find a name.",
-    "And some words...",
-    "are simply left on the page."
-  ];
-
-  return (
-    <div className="manuscript-scene">
-      <motion.div
-        className="manuscript"
-        initial={{ opacity: 0, y: 30, rotate: 3 }}
-        whileInView={{ opacity: 1, y: 0, rotate: -2 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-        animate={{ y: [0, -7, 0] }}
-      >
-        <span className="manuscript-label">
-          FRAGMENTS / NO. 001
-        </span>
-
-        <div className="manuscript-rule" />
-
-        <div className="manuscript-lines">
-          {lines.map((line, index) => (
-            <motion.p
-              key={line}
-              initial={{ opacity: 0, x: -8 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                delay: 0.8 + index * 0.65,
-                duration: 0.8
-              }}
-            >
-              {line}
-              {index === lines.length - 1 && (
-                <span className="ink-cursor" />
-              )}
-            </motion.p>
-          ))}
-        </div>
-
-        <div className="manuscript-footer">
-          <span>A THOUGHT, IN PASSING</span>
-          <span>AM — 001</span>
-        </div>
-      </motion.div>
-
-      <motion.span
-        className="manuscript-orbit"
-        animate={{ rotate: 360 }}
-        transition={{
-          duration: 35,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      >
-        WORDS · THOUGHTS · FRAGMENTS ·
-      </motion.span>
-    </div>
-  );
-}
 
 export default function Writing() {
   return (
     <main className="archive-page writing-page">
+
+      {/* PAGE INTRO */}
       <div className="archive-intro">
-        <span className="micro-label">AN INDEX OF WORDS · 02</span>
+        <span className="micro-label">
+          AN INDEX OF WORDS · 02
+        </span>
+
         <h1>
           The Writer's <em>Desk.</em>
         </h1>
+
         <p>
           Essays, poetry, fragments and thoughts that
           found their way onto a page.
         </p>
       </div>
 
+      {/* INTRODUCTORY BANNER */}
       <div className="writing-banner">
         <Feather size={24} strokeWidth={1} />
+
         <div>
           <span>WORDS I'VE KEPT</span>
           <p>
@@ -93,26 +33,99 @@ export default function Writing() {
             unwritten. Others are too difficult to say aloud.
           </p>
         </div>
+
         <a
-          href={mediumProfile}
+          href="https://medium.com/@aswanthmadhav07"
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
         >
           MEDIUM <ArrowUpRight size={15} />
         </a>
       </div>
+
+      {/* POETRY ARCHIVE */}
+      <section className="poetry-archive-section">
+
+        <div className="panel-top">
+          <span>01 — POETRY</span>
+          <span>WORDS THAT STAY</span>
+        </div>
+
+        <div className="poetry-archive-content">
+
+          <div className="poetry-archive-heading">
+            <span className="micro-label">
+              A SEPARATE CORNER OF MY WORLD
+            </span>
+
+            <h2>
+              Poetry<span>.</span>
+            </h2>
+
+            <p>
+              Some feelings find their way into verses.
+              Some memories become metaphors. And some
+              things are easier to write than to say.
+            </p>
+
+            <a
+              href="https://poetry.aswanth.me"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="writing-destination-link"
+            >
+              ENTER THE POETRY ARCHIVE
+              <ArrowUpRight size={16} />
+            </a>
+          </div>
+
+          <div className="poetry-visual">
+            <BookOpen
+              size={75}
+              strokeWidth={0.65}
+            />
+
+            <span>AN ARCHIVE OF VERSES</span>
+            <span>POETRY.ASWANTH.ME</span>
+          </div>
+
+        </div>
+      </section>
+
+      {/* MEDIUM ARTICLES */}
       <section className="writing-archive">
-  <div className="panel-top">
-    <span>01 — THE ARCHIVE</span>
-    <span>WORDS PUBLISHED</span>
-  </div>
 
-  <MediumArticles />
-</section>
+        <div className="panel-top">
+          <span>02 — ARTICLES & ESSAYS</span>
+          <span>WORDS PUBLISHED</span>
+        </div>
 
-      
-      
-    
+        <div className="medium-section-heading">
+          <div>
+            <span className="micro-label">
+              THOUGHTS, IDEAS & OBSERVATIONS
+            </span>
+
+            <h2>
+              Published <em>works.</em>
+            </h2>
+          </div>
+
+          <a
+            href="https://medium.com/@aswanthmadhav07"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="writing-destination-link"
+          >
+            VIEW MEDIUM
+            <ArrowUpRight size={15} />
+          </a>
+        </div>
+
+        <MediumArticles />
+
+      </section>
+
     </main>
   );
 }
