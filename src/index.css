@@ -1617,6 +1617,114 @@ a {
   animation: archiveReveal 1.4s ease both;
 }
 
+/* INTRO REPLAY CONTROL */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.replay-intro-link,
+.mobile-replay-intro {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #b5b1a8;
+  font: 8px 'DM Mono', monospace;
+  letter-spacing: .1em;
+  transition: color .25s, border-color .25s;
+}
+
+.replay-intro-link:hover,
+.mobile-replay-intro:hover {
+  color: #f0ede7;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  border: 1px solid #333;
+  background: transparent;
+  color: #ddd;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(8, 8, 8, .98);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .3s ease, visibility .3s ease;
+}
+
+.mobile-menu.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.mobile-menu-inner {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 90px 9vw 50px;
+}
+
+.mobile-menu-kicker {
+  color: #777;
+  font: 8px 'DM Mono', monospace;
+  letter-spacing: .15em;
+  margin-bottom: 28px;
+}
+
+.mobile-menu-inner > a:not(.mobile-replay-intro):not(.mobile-menu-contact) {
+  display: grid;
+  grid-template-columns: 35px 1fr 20px;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid #292929;
+  color: #e6e3dc;
+  font: 400 clamp(29px, 8vw, 42px) 'Cormorant Garamond', serif;
+}
+
+.mobile-menu-number {
+  color: #777;
+  font: 8px 'DM Mono', monospace;
+}
+
+.mobile-replay-intro {
+  justify-content: center;
+  align-self: flex-start;
+  border: 1px solid #48443b;
+  padding: 14px 16px;
+  margin-top: 32px;
+}
+
+.mobile-menu-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #888;
+  font: 8px 'DM Mono', monospace;
+  letter-spacing: .12em;
+  margin-top: 28px;
+}
+
+@media (max-width: 700px) {
+  .header-actions { gap: 12px; }
+  .header-actions > .replay-intro-link,
+  .header-actions > .nav-contact { display: none; }
+  .mobile-menu-toggle { display: grid; }
+}
+
+
 @keyframes archiveReveal {
   from {
     opacity: 0;

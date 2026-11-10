@@ -904,6 +904,9 @@ function GalleryFrame({ piece }) {
         <planeGeometry args={[1.98, 1.58]} />
         <meshStandardMaterial
           map={texture}
+          emissive="#8b8068"
+          emissiveMap={texture}
+          emissiveIntensity={0.32}
           roughness={0.92}
           metalness={0}
         />
@@ -915,14 +918,20 @@ function GalleryFrame({ piece }) {
         <meshStandardMaterial color="#292923" roughness={0.8} />
       </mesh>
 
-      {/* Frame spotlight */}
-      <spotLight
-        position={[0, 1.65, 0.8]}
-        intensity={9}
-        distance={5}
-        angle={0.55}
-        penumbra={0.85}
+      {/* Soft local illumination keeps each exhibit readable without washing out the room. */}
+      <pointLight
+        position={[0, 0.58, 0.62]}
+        intensity={2.2}
+        distance={3.2}
+        decay={2}
         color="#d8c9a9"
+      />
+      <pointLight
+        position={[0, -0.42, 0.48]}
+        intensity={0.65}
+        distance={1.8}
+        decay={2}
+        color="#a99a7b"
       />
     </group>
   );
@@ -939,9 +948,9 @@ function GalleryRoom() {
       <mesh position={[0, -0.2, -18]} receiveShadow>
         <boxGeometry args={[12, 0.4, 17]} />
         <meshStandardMaterial
-          color="#292925"
-          roughness={0.34}
-          metalness={0.22}
+          color="#242420"
+          roughness={0.68}
+          metalness={0.06}
         />
       </mesh>
 
@@ -982,15 +991,24 @@ function GalleryRoom() {
         <GalleryFrame key={`${piece.type}-${index}`} piece={piece} />
       ))}
 
-      {/* Central floor lights */}
+      {/* Low-output architectural lights along the gallery edges. */}
       {[-14, -18, -22].map((z) => (
-        <pointLight
-          key={z}
-          position={[0, 3.9, z]}
-          intensity={7}
-          distance={7}
-          color="#b5a98f"
-        />
+        <group key={z}>
+          <pointLight
+            position={[-4.7, 4.25, z]}
+            intensity={2.2}
+            distance={4.5}
+            decay={2}
+            color="#b9aa8d"
+          />
+          <pointLight
+            position={[4.7, 4.25, z + 0.8]}
+            intensity={2.2}
+            distance={4.5}
+            decay={2}
+            color="#b9aa8d"
+          />
+        </group>
       ))}
     </group>
   );
@@ -1006,8 +1024,10 @@ function CameraRig({
   onArrive,
   onExit,
   onGalleryComplete,
+  onFootstep,
 }) {
   const elapsed = useRef(0);
+  const lastFootstep = useRef(-1);
   const completed = useRef(false);
   const notified = useRef(false);
 
@@ -1054,14 +1074,22 @@ function CameraRig({
       camera.position.lerpVectors(startPosition, endPosition, eased);
 
       const walkingStrength = Math.sin(progress * Math.PI);
+      const gaitPhase = elapsed.current * ((Math.PI * 2) / 0.96);
 
-      camera.position.y +=
-        Math.sin(elapsed.current * 8) * 0.018 * walkingStrength;
+      // First-person head movement: vertical bounce, weight transfer and body roll.
+      camera.position.y += Math.sin(gaitPhase * 2) * 0.038 * walkingStrength;
+      camera.position.x += Math.sin(gaitPhase) * 0.024 * walkingStrength;
+      camera.position.z += Math.cos(gaitPhase) * 0.012 * walkingStrength;
 
-      camera.position.x +=
-        Math.sin(elapsed.current * 4) * 0.009 * walkingStrength;
+      // Alternate footsteps at a natural walking cadence.
+      const stepIndex = Math.floor(elapsed.current / 0.48);
+      if (stepIndex !== lastFootstep.current && progress < 1) {
+        lastFootstep.current = stepIndex;
+        onFootstep?.(stepIndex % 2 === 0 ? "left" : "right", 0.9);
+      }
 
       camera.lookAt(0, 1.6, -9.7);
+      camera.rotation.z += Math.sin(gaitPhase) * 0.009 * walkingStrength;
 
       if (progress >= 1) {
         completed.current = true;
@@ -1128,10 +1156,17 @@ function CameraRig({
         eased
       );
 
-      // Gentle side-to-side movement to reveal the frames
+      // A slower, softer walking rhythm through the gallery.
+      const galleryPhase = galleryElapsed.current * ((Math.PI * 2) / 1.08);
       const gallerySway = Math.sin(progress * Math.PI * 4) * 0.7;
+      camera.position.x = gallerySway + Math.sin(galleryPhase) * 0.014;
+      camera.position.y += Math.sin(galleryPhase * 2) * 0.018;
 
-      camera.position.x = gallerySway;
+      const galleryStepIndex = Math.floor(galleryElapsed.current / 0.54);
+      if (galleryStepIndex !== lastFootstep.current && progress < 1) {
+        lastFootstep.current = galleryStepIndex;
+        onFootstep?.(galleryStepIndex % 2 === 0 ? "left" : "right", 0.48);
+      }
 
       // Alternate attention between the two gallery walls
       const viewingSide = Math.sin(progress * Math.PI * 4) * 2.2;
@@ -1173,32 +1208,16 @@ function CameraRig({
 function InteriorLighting() {
   return (
     <>
-      <ambientLight intensity={0.22} color="#c2b9a6" />
-
+      <ambientLight intensity={0.3} color="#b8b0a0" />
       <hemisphereLight
-        skyColor="#6c6b63"
+        skyColor="#77766e"
         groundColor="#171713"
-        intensity={0.18}
+        intensity={0.24}
       />
-
-      <pointLight
-        position={[0, 3.5, -14]}
-        intensity={22}
-        distance={12}
-        color="#d1c2a3"
-      />
-
-      <pointLight
-        position={[0, 3.5, -21]}
-        intensity={18}
-        distance={12}
-        color="#c5b89d"
-      />
-
       <directionalLight
         position={[-3, 5, -16]}
-        intensity={0.45}
-        color="#e0d5bf"
+        intensity={0.22}
+        color="#d2c5aa"
       />
     </>
   );
@@ -1218,6 +1237,7 @@ function Scene({
   onDoorClick,
   onDoorOpenComplete,
   onGalleryComplete,
+  onFootstep,
 }) {
   return (
     <>
@@ -1250,6 +1270,7 @@ function Scene({
         onArrive={onArrive}
         onExit={onExit}
         onGalleryComplete={onGalleryComplete}
+        onFootstep={onFootstep}
       />
     </>
   );
@@ -1266,9 +1287,81 @@ export default function IntroPreview() {
   const [doorReady, setDoorReady] = useState(false);
   const [entered, setEntered] = useState(false);
   const [blackout, setBlackout] = useState(false);
+  const audioContextRef = useRef(null);
+  const introVoiceRef = useRef(null);
+
+  // Audio is initialized by the visitor's click to satisfy browser autoplay rules.
+  // Add your supplied "Ah, shit. Here we go again." recording at:
+  // public/audio/intro-voice.mp3
+  const startExperience = () => {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass && !audioContextRef.current) {
+      audioContextRef.current = new AudioContextClass();
+    }
+    if (audioContextRef.current?.state === "suspended") {
+      audioContextRef.current.resume();
+    }
+
+    // The audio file is optional until you provide it. The intro still works without it.
+    if (introVoiceRef.current) {
+      introVoiceRef.current.currentTime = 0;
+      introVoiceRef.current.play().catch(() => {});
+    }
+
+    setStarted(true);
+  };
+
+  // Procedural concrete footsteps: filtered grit + a short low-frequency impact.
+  const playFootstep = (foot = "left", volume = 0.8) => {
+    const context = audioContextRef.current;
+    if (!context || context.state !== "running") return;
+
+    const now = context.currentTime;
+    const duration = 0.19;
+    const bufferSize = Math.floor(context.sampleRate * duration);
+    const buffer = context.createBuffer(1, bufferSize, context.sampleRate);
+    const samples = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      samples[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 2.2);
+    }
+
+    const noise = context.createBufferSource();
+    noise.buffer = buffer;
+    const filter = context.createBiquadFilter();
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(foot === "left" ? 720 : 590, now);
+    filter.frequency.exponentialRampToValueAtTime(180, now + duration);
+    const noiseGain = context.createGain();
+    noiseGain.gain.setValueAtTime(0.0001, now);
+    noiseGain.gain.exponentialRampToValueAtTime((foot === "left" ? 0.105 : 0.09) * volume, now + 0.012);
+    noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+    noise.connect(filter);
+    filter.connect(noiseGain);
+    noiseGain.connect(context.destination);
+    noise.start(now);
+    noise.stop(now + duration);
+
+    const thud = context.createOscillator();
+    const thudGain = context.createGain();
+    thud.type = "sine";
+    thud.frequency.setValueAtTime(foot === "left" ? 92 : 82, now);
+    thud.frequency.exponentialRampToValueAtTime(48, now + 0.11);
+    thudGain.gain.setValueAtTime(0.0001, now);
+    thudGain.gain.exponentialRampToValueAtTime(0.16 * volume, now + 0.008);
+    thudGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.13);
+    thud.connect(thudGain);
+    thudGain.connect(context.destination);
+    thud.start(now);
+    thud.stop(now + 0.14);
+  };
 
   return (
     <div className={`intro-preview ${blackout ? "intro-blackout" : ""}`}>
+      <audio
+        ref={introVoiceRef}
+        src="/audio/intro-voice.mp3"
+        preload="auto"
+      />
       <Canvas
         shadows
         dpr={[1, 1.5]}
@@ -1297,6 +1390,7 @@ export default function IntroPreview() {
           onDoorClick={() => setDoorOpened(true)}
           onDoorOpenComplete={() => setDoorReady(true)}
           onExit={() => setEntered(true)}
+          onFootstep={playFootstep}
           onGalleryComplete={() => {
             setBlackout(true);
             setTimeout(() => {
@@ -1326,7 +1420,7 @@ export default function IntroPreview() {
 
             <button
               className="intro-start-button"
-              onClick={() => setStarted(true)}
+              onClick={startExperience}
             >
               <span>CLICK TO BEGIN</span>
               <span className="intro-button-arrow">→</span>
@@ -1342,7 +1436,7 @@ export default function IntroPreview() {
         </div>
       )}
 
-      {doorOpened && !entered && (
+      {doorOpened && !doorReady && !entered && (
         <div className="intro-arrival">
           <span>THE WAY IS OPEN.</span>
           <p>There's more on the other side.</p>
@@ -1358,9 +1452,7 @@ export default function IntroPreview() {
 
       {blackout && (
         <div className="intro-blackout-message">
-          <span>
-            ASWANTH MADHAV
-            </span>
+          <span>I, ASWANTH MADHAV, WELCOME YOU.</span>
         </div>
       )}
 
@@ -1369,7 +1461,7 @@ export default function IntroPreview() {
           ? "THE END OF THE INTRODUCTION"
           : entered
           ? "STAGE 04 — THE ARCHIVE"
-          : doorReady
+          : doorReady && !entered
           ? "STAGE 03 — THE PASSAGE"
           : arrived
           ? "STAGE 02 — THE THRESHOLD"
