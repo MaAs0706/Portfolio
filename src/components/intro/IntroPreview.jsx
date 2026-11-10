@@ -3,9 +3,9 @@ import React, { useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-/* --------------------------------
-   PROCEDURAL SURFACE TEXTURES
--------------------------------- */
+/* ================================================
+   1. PROCEDURAL TEXTURES
+================================================ */
 
 function createConcreteTexture() {
   const canvas = document.createElement("canvas");
@@ -17,26 +17,28 @@ function createConcreteTexture() {
   ctx.fillStyle = "#77746c";
   ctx.fillRect(0, 0, 1024, 1024);
 
-  // Fine surface grain
-  for (let i = 0; i < 65000; i++) {
-    const x = Math.random() * 1024;
-    const y = Math.random() * 1024;
+  // Concrete grain
+  for (let i = 0; i < 50000; i++) {
     const shade = Math.random() > 0.5 ? 255 : 0;
     const alpha = Math.random() * 0.09;
 
     ctx.fillStyle = `rgba(${shade},${shade},${shade},${alpha})`;
-    ctx.fillRect(x, y, 1 + Math.random() * 2, 1 + Math.random() * 2);
+    ctx.fillRect(
+      Math.random() * 1024,
+      Math.random() * 1024,
+      1 + Math.random() * 2,
+      1 + Math.random() * 2
+    );
   }
 
-  // Large water stains
+  // Water stains
   for (let i = 0; i < 90; i++) {
     const x = Math.random() * 1024;
     const y = Math.random() * 1024;
     const radius = 20 + Math.random() * 110;
 
     const gradient = ctx.createRadialGradient(
-      x, y, 1,
-      x, y, radius
+      x, y, 1, x, y, radius
     );
 
     gradient.addColorStop(0, "rgba(20,19,17,0.24)");
@@ -49,7 +51,7 @@ function createConcreteTexture() {
     ctx.fill();
   }
 
-  // Vertical runoff marks
+  // Water runoff
   for (let i = 0; i < 110; i++) {
     const x = Math.random() * 1024;
     const y = Math.random() * 1024;
@@ -111,11 +113,15 @@ function createMetalTexture() {
 
   // Brushed metal grain
   for (let i = 0; i < 12000; i++) {
-    const y = Math.random() * 512;
     const shade = Math.random() > 0.5 ? 255 : 0;
 
     ctx.fillStyle = `rgba(${shade},${shade},${shade},${Math.random() * 0.07})`;
-    ctx.fillRect(Math.random() * 512, y, 1 + Math.random() * 18, 1);
+    ctx.fillRect(
+      Math.random() * 512,
+      Math.random() * 512,
+      1 + Math.random() * 18,
+      1
+    );
   }
 
   // Scratches
@@ -125,7 +131,11 @@ function createMetalTexture() {
 
     ctx.beginPath();
     ctx.moveTo(x, y);
-    ctx.lineTo(x + (Math.random() - 0.5) * 35, y + (Math.random() - 0.5) * 8);
+    ctx.lineTo(
+      x + (Math.random() - 0.5) * 35,
+      y + (Math.random() - 0.5) * 8
+    );
+
     ctx.strokeStyle = `rgba(220,220,210,${Math.random() * 0.16})`;
     ctx.lineWidth = Math.random() * 1.5;
     ctx.stroke();
@@ -140,9 +150,9 @@ function createMetalTexture() {
   return texture;
 }
 
-/* --------------------------------
-   MATERIALS
--------------------------------- */
+/* ================================================
+   2. MATERIALS
+================================================ */
 
 function ConcreteMaterial({
   repeat = [2, 2],
@@ -187,9 +197,9 @@ function MetalMaterial({
   );
 }
 
-/* --------------------------------
-   CONCRETE GEOMETRY
--------------------------------- */
+/* ================================================
+   3. CORRIDOR STRUCTURE
+================================================ */
 
 function ConcreteBox({
   position,
@@ -290,7 +300,7 @@ function CorridorStructure() {
         color="#625e57"
       />
 
-      {/* Damp patches along the lower walls */}
+      {/* Damp patches */}
       {[-1, 1].map((side) => (
         <mesh
           key={side}
@@ -310,14 +320,70 @@ function CorridorStructure() {
   );
 }
 
-/* --------------------------------
-   INDUSTRIAL STEEL DOOR
--------------------------------- */
+/* ================================================
+   4. INTERACTIVE INDUSTRIAL DOOR
+================================================ */
 
-function IndustrialDoor() {
+function IndustrialDoor({
+  arrived,
+  doorOpened,
+  onHandleClick,
+  onDoorOpenComplete,
+}) {
+  const doorLeaf = useRef();
+  const [hovered, setHovered] = useState(false);
+  const notified = useRef(false);
+
+  useFrame((_, delta) => {
+    if (!doorLeaf.current) return;
+
+    const targetAngle = doorOpened ? 1.32 : 0;
+
+    doorLeaf.current.rotation.y = THREE.MathUtils.damp(
+      doorLeaf.current.rotation.y,
+      targetAngle,
+      doorOpened ? 1.15 : 5,
+      delta
+    );
+
+    // Notify only when the door has physically opened.
+    if (
+      doorOpened &&
+      !notified.current &&
+      Math.abs(doorLeaf.current.rotation.y - targetAngle) < 0.025
+    ) {
+      notified.current = true;
+      onDoorOpenComplete();
+    }
+  });
+
+  const handlePointerOver = (event) => {
+    event.stopPropagation();
+
+    if (!arrived || doorOpened) return;
+
+    setHovered(true);
+    document.body.style.cursor = "pointer";
+  };
+
+  const handlePointerOut = () => {
+    setHovered(false);
+    document.body.style.cursor = "auto";
+  };
+
+  const handleClick = (event) => {
+    event.stopPropagation();
+
+    if (!arrived || doorOpened) return;
+
+    setHovered(false);
+    document.body.style.cursor = "auto";
+    onHandleClick();
+  };
+
   return (
     <group position={[0, 0, -9.93]}>
-      {/* Deep outer frame */}
+      {/* STATIC FRAME */}
       <mesh position={[-1.13, 1.65, -0.15]} castShadow>
         <boxGeometry args={[0.2, 3.42, 0.48]} />
         <MetalMaterial color="#242824" metalness={0.8} />
@@ -333,137 +399,127 @@ function IndustrialDoor() {
         <MetalMaterial color="#292d28" metalness={0.8} />
       </mesh>
 
-      {/* Recessed shadow behind door */}
-      <mesh position={[0, 1.62, -0.09]}>
-        <boxGeometry args={[2.12, 3.16, 0.12]} />
-        <meshStandardMaterial color="#090b09" roughness={1} />
-      </mesh>
-
-      {/* Main slab */}
-      <mesh position={[0, 1.62, 0]} castShadow receiveShadow>
-        <boxGeometry args={[2.12, 3.12, 0.22]} />
-        <MetalMaterial
-          color="#424840"
-          metalness={0.72}
-          roughness={0.7}
-          textured
-        />
-      </mesh>
-
-      {/* Vertical inset panels */}
-      {[-0.68, 0, 0.68].map((x) => (
-        <group key={x}>
-          <mesh position={[x, 1.65, 0.119]}>
-            <boxGeometry args={[0.55, 2.68, 0.025]} />
+      {/* MOVING DOOR LEAF — LEFT HINGE PIVOT */}
+      <group ref={doorLeaf} position={[-1.06, 0, 0]}>
+        <group position={[1.06, 0, 0]}>
+          {/* Main slab */}
+          <mesh position={[0, 1.62, 0]} castShadow receiveShadow>
+            <boxGeometry args={[2.12, 3.12, 0.22]} />
             <MetalMaterial
-              color="#343a34"
-              metalness={0.55}
-              roughness={0.82}
-            />
-          </mesh>
-
-          {/* Panel inner edge */}
-          <mesh position={[x, 1.65, 0.137]}>
-            <boxGeometry args={[0.015, 2.58, 0.006]} />
-            <meshStandardMaterial
-              color="#858477"
-              metalness={0.75}
+              color="#424840"
+              metalness={0.72}
               roughness={0.7}
+              textured
             />
           </mesh>
+
+          {/* Inset panels */}
+          {[-0.68, 0, 0.68].map((x) => (
+            <mesh key={x} position={[x, 1.65, 0.119]}>
+              <boxGeometry args={[0.55, 2.68, 0.025]} />
+              <MetalMaterial
+                color="#343a34"
+                metalness={0.55}
+                roughness={0.82}
+              />
+            </mesh>
+          ))}
+
+          {/* Panel edges */}
+          {[-0.68, 0, 0.68].map((x) => (
+            <mesh key={`edge-${x}`} position={[x, 1.65, 0.137]}>
+              <boxGeometry args={[0.015, 2.58, 0.006]} />
+              <meshStandardMaterial
+                color="#858477"
+                metalness={0.75}
+                roughness={0.7}
+              />
+            </mesh>
+          ))}
+
+          {/* Reinforcement bars */}
+          {[-0.68, 0.68, 1.42].map((y) => (
+            <mesh key={y} position={[0, y, 0.16]} castShadow>
+              <boxGeometry args={[2.04, 0.055, 0.045]} />
+              <MetalMaterial
+                color="#686b61"
+                metalness={0.86}
+                roughness={0.43}
+              />
+            </mesh>
+          ))}
+
+          {/* Kick plate */}
+          <mesh position={[0, 0.16, 0.15]}>
+            <boxGeometry args={[1.98, 0.24, 0.035]} />
+            <MetalMaterial color="#292e29" metalness={0.8} />
+          </mesh>
+
+          {/* Lock plate */}
+          <mesh position={[0.76, 1.45, 0.18]}>
+            <boxGeometry args={[0.22, 0.46, 0.055]} />
+            <MetalMaterial color="#20241f" metalness={0.85} />
+          </mesh>
+
+          {/* Handle mounting plate */}
+          <mesh position={[0.76, 1.45, 0.215]}>
+            <boxGeometry args={[0.12, 0.3, 0.025]} />
+            <MetalMaterial color="#77776c" metalness={0.95} />
+          </mesh>
+
+          {/* INTERACTIVE HANDLE */}
+          <mesh
+            position={[0.76, 1.45, 0.29]}
+            rotation={[0, 0, Math.PI / 2]}
+            onPointerOver={handlePointerOver}
+            onPointerOut={handlePointerOut}
+            onClick={handleClick}
+            castShadow
+          >
+            <cylinderGeometry args={[0.045, 0.045, 0.34, 24]} />
+
+            <meshStandardMaterial
+              color={hovered ? "#e4d6b4" : "#b2aa94"}
+              emissive={hovered ? "#77633b" : "#000000"}
+              emissiveIntensity={hovered ? 0.45 : 0}
+              metalness={0.98}
+              roughness={0.23}
+            />
+          </mesh>
+
+          {/* Hinges */}
+          {[-1.12, 0, 1.12].map((y) => (
+            <group key={y} position={[-1.075, 1.62 + y, 0.13]}>
+              <mesh castShadow>
+                <boxGeometry args={[0.15, 0.26, 0.14]} />
+                <MetalMaterial color="#77766d" metalness={0.85} />
+              </mesh>
+
+              <mesh position={[0, 0, 0.08]}>
+                <cylinderGeometry args={[0.045, 0.045, 0.29, 12]} />
+                <MetalMaterial color="#aaa18d" metalness={0.9} />
+              </mesh>
+            </group>
+          ))}
+
+          {/* Rivets */}
+          {[-0.92, 0.92].map((x) =>
+            [0.28, 2.96].map((y) => (
+              <mesh key={`${x}-${y}`} position={[x, y, 0.125]}>
+                <cylinderGeometry args={[0.025, 0.025, 0.025, 12]} />
+                <MetalMaterial color="#a09a88" metalness={0.9} />
+              </mesh>
+            ))
+          )}
         </group>
-      ))}
-
-      {/* Reinforcement bars */}
-      {[-0.68, 0.68, 1.42].map((y) => (
-        <mesh key={y} position={[0, y, 0.16]} castShadow>
-          <boxGeometry args={[2.04, 0.055, 0.045]} />
-          <MetalMaterial
-            color="#686b61"
-            metalness={0.86}
-            roughness={0.43}
-          />
-        </mesh>
-      ))}
-
-      {/* Bottom kick plate */}
-      <mesh position={[0, 0.16, 0.15]}>
-        <boxGeometry args={[1.98, 0.24, 0.035]} />
-        <MetalMaterial color="#292e29" metalness={0.8} />
-      </mesh>
-
-      {/* Lock plate */}
-      <mesh position={[0.76, 1.45, 0.18]}>
-        <boxGeometry args={[0.22, 0.46, 0.055]} />
-        <MetalMaterial color="#20241f" metalness={0.85} />
-      </mesh>
-
-      {/* Handle mounting plates */}
-      <mesh position={[0.76, 1.45, 0.215]}>
-        <boxGeometry args={[0.12, 0.3, 0.025]} />
-        <MetalMaterial color="#77776c" metalness={0.95} roughness={0.25} />
-      </mesh>
-
-      {/* Handle */}
-      <mesh
-        position={[0.76, 1.45, 0.27]}
-        rotation={[0, 0, Math.PI / 2]}
-        castShadow
-      >
-        <cylinderGeometry args={[0.035, 0.035, 0.32, 24]} />
-        <MetalMaterial
-          color="#b2aa94"
-          metalness={0.98}
-          roughness={0.23}
-        />
-      </mesh>
-
-      {/* Hinges */}
-      {[-1.12, 0, 1.12].map((y) => (
-        <group key={y} position={[-1.075, 1.62 + y, 0.13]}>
-          <mesh castShadow>
-            <boxGeometry args={[0.15, 0.26, 0.14]} />
-            <MetalMaterial color="#77766d" metalness={0.85} />
-          </mesh>
-          <mesh position={[0, 0, 0.08]}>
-            <cylinderGeometry args={[0.045, 0.045, 0.29, 12]} />
-            <MetalMaterial color="#aaa18d" metalness={0.9} />
-          </mesh>
-        </group>
-      ))}
-
-      {/* Rivets */}
-      {[-0.92, 0.92].map((x) =>
-        [0.28, 2.96].map((y) => (
-          <mesh key={`${x}-${y}`} position={[x, y, 0.125]}>
-            <cylinderGeometry args={[0.025, 0.025, 0.025, 12]} />
-            <MetalMaterial color="#a09a88" metalness={0.9} />
-          </mesh>
-        ))
-      )}
-
-      {/* Warning light housing */}
-      <mesh position={[0, 3.48, 0.02]}>
-        <boxGeometry args={[0.46, 0.13, 0.12]} />
-        <MetalMaterial color="#242723" metalness={0.7} />
-      </mesh>
-
-      <mesh position={[0, 3.49, 0.09]}>
-        <boxGeometry args={[0.38, 0.075, 0.045]} />
-        <meshStandardMaterial
-          color="#b27643"
-          emissive="#a64d19"
-          emissiveIntensity={0.7}
-          roughness={0.35}
-        />
-      </mesh>
+      </group>
     </group>
   );
 }
 
-/* --------------------------------
-   EXPOSED PIPES
--------------------------------- */
+/* ================================================
+   5. EXPOSED PIPES
+================================================ */
 
 function Pipe({
   position,
@@ -505,7 +561,6 @@ function Pipes() {
         color="#56564c"
       />
 
-      {/* Pipe brackets */}
       {[-6, -2, 2].map((z) => (
         <group key={z}>
           <Pipe
@@ -524,9 +579,9 @@ function Pipes() {
   );
 }
 
-/* --------------------------------
-   RUBBLE / DEBRIS
--------------------------------- */
+/* ================================================
+   6. RUBBLE AND DEBRIS
+================================================ */
 
 const debris = [
   { p: [-1.45, 0.12, 3.2], s: [0.48, 0.22, 0.4], r: [0.2, 0.5, 0.1] },
@@ -541,6 +596,28 @@ const debris = [
 ];
 
 function Rubble() {
+  const fragments = useMemo(
+    () =>
+      Array.from({ length: 30 }, () => ({
+        position: [
+          (Math.random() - 0.5) * 4,
+          0.025 + Math.random() * 0.04,
+          -8 + Math.random() * 15,
+        ],
+        rotation: [
+          Math.random() * 2,
+          Math.random() * 2,
+          Math.random() * 2,
+        ],
+        scale: [
+          0.025 + Math.random() * 0.08,
+          0.02 + Math.random() * 0.05,
+          0.025 + Math.random() * 0.08,
+        ],
+      })),
+    []
+  );
+
   return (
     <group>
       {debris.map((rock, index) => (
@@ -561,7 +638,7 @@ function Rubble() {
         </mesh>
       ))}
 
-      {/* Broken concrete slab */}
+      {/* Broken slab */}
       <mesh
         position={[1.2, 0.12, -2.8]}
         rotation={[0.1, 0.4, -0.08]}
@@ -571,7 +648,7 @@ function Rubble() {
         <meshStandardMaterial color="#555149" roughness={1} />
       </mesh>
 
-      {/* Fallen structural beam */}
+      {/* Fallen beam */}
       <mesh
         position={[-0.3, 0.18, -4.8]}
         rotation={[0.04, 0.3, 0.12]}
@@ -581,25 +658,13 @@ function Rubble() {
         <MetalMaterial color="#3d403b" metalness={0.55} roughness={0.95} />
       </mesh>
 
-      {/* Small concrete fragments */}
-      {Array.from({ length: 30 }, (_, i) => (
+      {/* Small fragments */}
+      {fragments.map((fragment, i) => (
         <mesh
           key={`fragment-${i}`}
-          position={[
-            (Math.random() - 0.5) * 4,
-            0.025 + Math.random() * 0.04,
-            -8 + Math.random() * 15,
-          ]}
-          rotation={[
-            Math.random() * 2,
-            Math.random() * 2,
-            Math.random() * 2,
-          ]}
-          scale={[
-            0.025 + Math.random() * 0.08,
-            0.02 + Math.random() * 0.05,
-            0.025 + Math.random() * 0.08,
-          ]}
+          position={fragment.position}
+          rotation={fragment.rotation}
+          scale={fragment.scale}
           castShadow
         >
           <icosahedronGeometry args={[1, 0]} />
@@ -614,9 +679,9 @@ function Rubble() {
   );
 }
 
-/* --------------------------------
-   DUST PARTICLES
--------------------------------- */
+/* ================================================
+   7. DUST PARTICLES
+================================================ */
 
 function createDustTexture() {
   const canvas = document.createElement("canvas");
@@ -625,7 +690,9 @@ function createDustTexture() {
 
   const ctx = canvas.getContext("2d");
 
-  const gradient = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  const gradient = ctx.createRadialGradient(
+    32, 32, 0, 32, 32, 32
+  );
 
   gradient.addColorStop(0, "rgba(255,255,255,1)");
   gradient.addColorStop(0.25, "rgba(255,255,255,0.8)");
@@ -656,10 +723,11 @@ function DustParticles() {
   const dustTexture = useMemo(() => createDustTexture(), []);
 
   useFrame((state, delta) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += delta * 0.006;
-      pointsRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.25) * 0.035;
-    }
+    if (!pointsRef.current) return;
+
+    pointsRef.current.rotation.y += delta * 0.006;
+    pointsRef.current.position.y =
+      Math.sin(state.clock.elapsedTime * 0.25) * 0.035;
   });
 
   return (
@@ -687,11 +755,11 @@ function DustParticles() {
   );
 }
 
-/* --------------------------------
-   LIGHTING
--------------------------------- */
+/* ================================================
+   8. LIGHTING
+================================================ */
 
-function Lighting() {
+function Lighting({ doorOpened }) {
   const spotlightTarget = useMemo(() => {
     const target = new THREE.Object3D();
     target.position.set(0, 1.6, -9.7);
@@ -700,7 +768,10 @@ function Lighting() {
 
   return (
     <>
-      <ambientLight intensity={0.32} color="#a9a69d" />
+      <ambientLight
+        intensity={doorOpened ? 0.65 : 0.32}
+        color={doorOpened ? "#eee9dc" : "#a9a69d"}
+      />
 
       <hemisphereLight
         skyColor="#a9a9a4"
@@ -708,17 +779,15 @@ function Lighting() {
         intensity={0.35}
       />
 
-      {/* Main overhead light */}
+      {/* Corridor overhead light */}
       <pointLight
         position={[0, 4.1, 1.8]}
         intensity={38}
         distance={11}
         decay={2}
         color="#d8d1bd"
-        castShadow
       />
 
-      {/* Mid-corridor illumination */}
       <pointLight
         position={[0, 3.2, -5]}
         intensity={24}
@@ -727,12 +796,11 @@ function Lighting() {
         color="#a9aaa5"
       />
 
-      {/* Door illumination */}
       <pointLight
         position={[0, 3.5, -9.2]}
-        intensity={16}
-        distance={4}
-        color="#d4c9ad"
+        intensity={doorOpened ? 42 : 16}
+        distance={doorOpened ? 12 : 4}
+        color="#fff0d2"
       />
 
       <primitive object={spotlightTarget} />
@@ -757,25 +825,102 @@ function Lighting() {
         color="#d5cbb5"
       />
 
-      {/* Subtle floor bounce */}
-      <pointLight
-        position={[0, 0.35, -4]}
-        intensity={3}
-        distance={6}
-        color="#777568"
-      />
+      {/* Interior light */}
+      {doorOpened && (
+        <>
+          <pointLight
+            position={[0, 3.5, -16]}
+            intensity={75}
+            distance={18}
+            decay={2}
+            color="#fff2d9"
+          />
+
+          <pointLight
+            position={[0, 4, -23]}
+            intensity={65}
+            distance={15}
+            decay={2}
+            color="#ffffff"
+          />
+
+          <directionalLight
+            position={[0, 4, -25]}
+            intensity={2.2}
+            color="#fff8e9"
+          />
+        </>
+      )}
     </>
   );
 }
 
-/* --------------------------------
-   CINEMATIC CAMERA
--------------------------------- */
+/* ================================================
+   9. INTERIOR BEYOND THE DOOR
+================================================ */
 
-function CameraRig({ started, onArrive }) {
+function BeyondDoor() {
+  return (
+    <group>
+      {/* Floor */}
+      <mesh position={[0, -0.2, -18]} receiveShadow>
+        <boxGeometry args={[12, 0.4, 16]} />
+        <meshStandardMaterial color="#c5c2b9" roughness={0.88} />
+      </mesh>
+
+      {/* Side walls */}
+      <mesh position={[-6, 2.5, -18]}>
+        <boxGeometry args={[0.3, 5, 16]} />
+        <meshStandardMaterial color="#aaa99f" roughness={0.9} />
+      </mesh>
+
+      <mesh position={[6, 2.5, -18]}>
+        <boxGeometry args={[0.3, 5, 16]} />
+        <meshStandardMaterial color="#aaa99f" roughness={0.9} />
+      </mesh>
+
+      {/* Back wall */}
+      <mesh position={[0, 2.5, -26]}>
+        <boxGeometry args={[12, 5, 0.3]} />
+        <meshStandardMaterial color="#d4d1c8" roughness={0.9} />
+      </mesh>
+
+      {/* Ceiling */}
+      <mesh position={[0, 5, -18]}>
+        <boxGeometry args={[12, 0.3, 16]} />
+        <meshStandardMaterial color="#e0ded5" roughness={0.9} />
+      </mesh>
+
+      {/* Architectural blocks */}
+      <mesh position={[-3.7, 1.1, -19]}>
+        <boxGeometry args={[0.12, 2.2, 3]} />
+        <meshStandardMaterial color="#e1ded4" roughness={0.85} />
+      </mesh>
+
+      <mesh position={[3.8, 1.5, -22]}>
+        <boxGeometry args={[0.12, 3, 2]} />
+        <meshStandardMaterial color="#e1ded4" roughness={0.85} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ================================================
+   10. CAMERA RIG
+================================================ */
+
+function CameraRig({
+  started,
+  doorReady,
+  onArrive,
+  onExit,
+}) {
   const elapsed = useRef(0);
   const completed = useRef(false);
   const notified = useRef(false);
+
+  const exitElapsed = useRef(0);
+  const exitCompleted = useRef(false);
 
   const startPosition = useMemo(
     () => new THREE.Vector3(0, 1.7, 6.5),
@@ -787,84 +932,170 @@ function CameraRig({ started, onArrive }) {
     []
   );
 
-  const duration = 9;
+  const interiorPosition = useMemo(
+    () => new THREE.Vector3(0, 1.7, -15.5),
+    []
+  );
+
+  const lookTarget = useMemo(
+    () => new THREE.Vector3(),
+    []
+  );
 
   useFrame((state, delta) => {
     const camera = state.camera;
+    const safeDelta = Math.min(delta, 0.05);
 
-    if (!started || completed.current) return;
+    // FIRST MOVEMENT: walk through the corridor
+    if (started && !completed.current) {
+      elapsed.current += safeDelta;
 
-    elapsed.current += Math.min(delta, 0.05);
+      const progress = Math.min(elapsed.current / 9, 1);
+      const eased = THREE.MathUtils.smoothstep(progress, 0, 1);
 
-    const progress = Math.min(elapsed.current / duration, 1);
+      camera.position.lerpVectors(
+        startPosition,
+        endPosition,
+        eased
+      );
 
-    const eased = THREE.MathUtils.smoothstep(progress, 0, 1);
+      const walkingStrength = Math.sin(progress * Math.PI);
 
-    camera.position.lerpVectors(startPosition, endPosition, eased);
+      camera.position.y +=
+        Math.sin(elapsed.current * 8) *
+        0.018 *
+        walkingStrength;
 
-    const walkingStrength = Math.sin(progress * Math.PI);
+      camera.position.x +=
+        Math.sin(elapsed.current * 4) *
+        0.009 *
+        walkingStrength;
 
-    const bob =
-      Math.sin(elapsed.current * 8) *
-      0.018 *
-      walkingStrength;
-
-    const sway =
-      Math.sin(elapsed.current * 4) *
-      0.009 *
-      walkingStrength;
-
-    camera.position.y += bob;
-    camera.position.x += sway;
-
-    camera.lookAt(0, 1.6, -9.7);
-
-    if (progress >= 1) {
-      completed.current = true;
-
-      camera.position.copy(endPosition);
       camera.lookAt(0, 1.6, -9.7);
 
-      if (!notified.current) {
-        notified.current = true;
-        onArrive();
+      if (progress >= 1) {
+        completed.current = true;
+        camera.position.copy(endPosition);
+        camera.lookAt(0, 1.6, -9.7);
+
+        if (!notified.current) {
+          notified.current = true;
+          onArrive();
+        }
       }
+
+      return;
+    }
+
+    // SECOND MOVEMENT: pass through the open doorway
+    if (
+      doorReady &&
+      completed.current &&
+      !exitCompleted.current
+    ) {
+      exitElapsed.current += safeDelta;
+
+      const progress = Math.min(exitElapsed.current / 5, 1);
+      const eased = THREE.MathUtils.smoothstep(progress, 0, 1);
+
+      camera.position.lerpVectors(
+        endPosition,
+        interiorPosition,
+        eased
+      );
+
+      lookTarget.set(
+        0,
+        1.7,
+        THREE.MathUtils.lerp(-9.7, -21, eased)
+      );
+
+      camera.lookAt(lookTarget);
+
+      if (progress >= 1) {
+        exitCompleted.current = true;
+        camera.position.copy(interiorPosition);
+        camera.lookAt(0, 1.7, -21);
+        onExit();
+      }
+
+      return;
+    }
+
+    if (completed.current && !doorReady) {
+      camera.lookAt(0, 1.6, -9.7);
     }
   });
 
   return null;
 }
 
-/* --------------------------------
-   SCENE
--------------------------------- */
+/* ================================================
+   11. COMPLETE SCENE
+================================================ */
 
-function Scene({ started, onArrive }) {
+function Scene({
+  started,
+  arrived,
+  doorOpened,
+  doorReady,
+  onArrive,
+  onExit,
+  onDoorClick,
+  onDoorOpenComplete,
+}) {
   return (
     <>
-      <color attach="background" args={["#11110f"]} />
+      <color
+        attach="background"
+        args={[doorOpened ? "#c9c6bd" : "#11110f"]}
+      />
 
-      <fog attach="fog" args={["#11110f", 7, 23]} />
+      <fog
+        attach="fog"
+        args={[
+          doorOpened ? "#c9c6bd" : "#11110f",
+          doorOpened ? 13 : 7,
+          doorOpened ? 38 : 23,
+        ]}
+      />
 
-      <Lighting />
+      <Lighting doorOpened={doorOpened} />
+
       <CorridorStructure />
       <Pipes />
-      <IndustrialDoor />
+
+      <IndustrialDoor
+        arrived={arrived}
+        doorOpened={doorOpened}
+        onHandleClick={onDoorClick}
+        onDoorOpenComplete={onDoorOpenComplete}
+      />
+
       <Rubble />
+      <BeyondDoor />
       <DustParticles />
 
-      <CameraRig started={started} onArrive={onArrive} />
+      <CameraRig
+        started={started}
+        doorReady={doorReady}
+        onArrive={onArrive}
+        onExit={onExit}
+      />
     </>
   );
 }
 
-/* --------------------------------
-   PREVIEW PAGE
--------------------------------- */
+/* ================================================
+   12. INTRO EXPERIENCE
+================================================ */
 
 export default function IntroPreview() {
   const [started, setStarted] = useState(false);
   const [arrived, setArrived] = useState(false);
+  const [doorOpened, setDoorOpened] = useState(false);
+  const [doorReady, setDoorReady] = useState(false);
+  const [entered, setEntered] = useState(false);
 
   return (
     <div className="intro-preview">
@@ -875,7 +1106,7 @@ export default function IntroPreview() {
           position: [0, 1.7, 6.5],
           fov: 60,
           near: 0.1,
-          far: 50,
+          far: 60,
         }}
         gl={{
           antialias: true,
@@ -889,17 +1120,23 @@ export default function IntroPreview() {
       >
         <Scene
           started={started}
+          arrived={arrived}
+          doorOpened={doorOpened}
+          doorReady={doorReady}
           onArrive={() => setArrived(true)}
+          onDoorClick={() => setDoorOpened(true)}
+          onDoorOpenComplete={() => setDoorReady(true)}
+          onExit={() => setEntered(true)}
         />
       </Canvas>
 
-      {/* Top labels */}
+      {/* TOP LABELS */}
       <div className="intro-preview-top">
-        <span>ENVIRONMENT STUDY / 002</span>
+        <span>ENVIRONMENT STUDY / 003</span>
         <span>THE THRESHOLD</span>
       </div>
 
-      {/* Initial interaction */}
+      {/* START SCREEN */}
       {!started && (
         <div className="intro-start-screen">
           <div className="intro-start-content">
@@ -926,17 +1163,37 @@ export default function IntroPreview() {
         </div>
       )}
 
-      {/* Arrival message */}
-      {arrived && (
+      {/* ARRIVAL AT THE DOOR */}
+      {arrived && !doorOpened && (
         <div className="intro-arrival">
           <span>YOU'VE MADE IT THIS FAR.</span>
-          <p>Some doors are harder to open.</p>
+          <p>Reach for the handle.</p>
         </div>
       )}
 
-      {/* Bottom label */}
+      {/* DOOR OPENING */}
+      {doorOpened && !entered && (
+        <div className="intro-arrival">
+          <span>THE WAY IS OPEN.</span>
+          <p>There's more on the other side.</p>
+        </div>
+      )}
+
+      {/* INTERIOR ARRIVAL */}
+      {entered && (
+        <div className="intro-arrival">
+          <span>WELCOME.</span>
+          <p>You've found your way here.</p>
+        </div>
+      )}
+
+      {/* BOTTOM LABEL */}
       <div className="intro-preview-bottom">
-        {arrived
+        {entered
+          ? "STAGE 04 — THE OTHER SIDE"
+          : doorReady
+          ? "STAGE 03 — THE PASSAGE"
+          : arrived
           ? "STAGE 02 — THE THRESHOLD"
           : "STAGE 01 — INDUSTRIAL CORRIDOR"}
       </div>

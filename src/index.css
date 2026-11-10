@@ -1567,6 +1567,18 @@ a {
     font-size: 23px;
   }
 }
+.intro-arrival {
+  pointer-events: none;
+  z-index: 5;
+}
+
+.intro-start-button {
+  cursor: pointer;
+}
+
+.intro-preview canvas {
+  cursor: default;
+}
 
 @media (max-width: 360px) {
   .intro-preview-top {
