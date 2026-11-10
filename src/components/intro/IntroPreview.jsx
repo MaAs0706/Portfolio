@@ -1452,7 +1452,7 @@ export default function IntroPreview() {
 
       {blackout && (
         <div className="intro-blackout-message">
-          <span>I, ASWANTH MADHAV, WELCOME YOU.</span>
+          <span>ASWANTH MADHAV</span>
         </div>
       )}
 
