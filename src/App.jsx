@@ -1,5 +1,6 @@
 
 import React from "react";
+import IntroPreview from "./components/intro/IntroPreview";
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -98,7 +99,6 @@ const experiences = [
       "Leading a student community, coordinating initiatives and creating opportunities for debate and diplomacy.",
     category: "LEADERSHIP",
   },
-  
   {
     year: "2026",
     role: "Campus Director",
@@ -437,9 +437,9 @@ function Experience() {
       </div>
 
       <div className="experience-list">
-        {experiences.map((item) => (
+        {experiences.map((item, index) => (
           <motion.article
-            key={item.organisation}
+            key={`${item.organisation}-${item.year}-${index}`}
             className="experience-row"
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -712,6 +712,12 @@ export default function App() {
               <Footer />
             </>
           }
+        />
+
+        {/* Temporary 3D environment preview */}
+        <Route
+          path="/intro-preview"
+          element={<IntroPreview />}
         />
 
         <Route path="*" element={<HomePage />} />

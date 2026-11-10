@@ -1652,6 +1652,121 @@ a {
   }
 }
 
+/* THE THRESHOLD — ENVIRONMENT PREVIEW */
+
+.intro-preview {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #11110f;
+}
+
+.intro-preview canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-preview-label {
+  position: absolute;
+  top: 28px;
+  left: 32px;
+  right: 32px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: rgba(230, 227, 220, 0.58);
+}
+
+.intro-preview-note {
+  position: absolute;
+  bottom: 28px;
+  left: 32px;
+  pointer-events: none;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: rgba(230, 227, 220, 0.45);
+}
+
+@media (max-width: 600px) {
+  .intro-preview-label {
+    top: 20px;
+    left: 18px;
+    right: 18px;
+    font-size: 8px;
+  }
+
+  .intro-preview-note {
+    bottom: 20px;
+    left: 18px;
+    font-size: 8px;
+  }
+}
+
+.intro-preview {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 99999;
+  overflow: hidden;
+  background: #11110f;
+}
+
+.intro-preview canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-preview-top {
+  position: absolute;
+  top: 28px;
+  left: 40px;
+  right: 40px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  color: rgba(225, 222, 212, 0.55);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+.intro-preview-bottom {
+  position: absolute;
+  bottom: 30px;
+  left: 40px;
+  pointer-events: none;
+  color: rgba(225, 222, 212, 0.55);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+}
+
+@media (max-width: 600px) {
+  .intro-preview-top {
+    top: 22px;
+    left: 20px;
+    right: 20px;
+    font-size: 8px;
+  }
+
+  .intro-preview-bottom {
+    left: 20px;
+    bottom: 22px;
+    font-size: 8px;
+  }
+}
+
+
 @media (max-width: 380px) {
   .mobile-menu-footer {
     flex-direction: column;
