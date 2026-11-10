@@ -176,8 +176,7 @@ a {
 }
 
 .intro-main h1 {
-  font: 300 clamp(68px, 7.5vw, 104px)/.83
-    'Cormorant Garamond', serif;
+  font: 300 clamp(68px, 7.5vw, 104px)/.83 'Cormorant Garamond', serif;
   letter-spacing: -.055em;
   margin: 0 0 25px;
   color: #e9e6df;
@@ -279,8 +278,7 @@ a {
 }
 
 .portfolio-heading h2 {
-  font: 300 clamp(55px, 6vw, 75px)/.9
-    'Cormorant Garamond', serif;
+  font: 300 clamp(55px, 6vw, 75px)/.9 'Cormorant Garamond', serif;
   letter-spacing: -.04em;
   margin: 0;
 }
@@ -342,8 +340,7 @@ a {
   display: block;
   object-fit: cover;
   filter: grayscale(100%) brightness(.65) contrast(1.05);
-  transition: transform .8s cubic-bezier(.2,.7,.2,1),
-              filter .6s ease;
+  transition: transform .8s cubic-bezier(.2,.7,.2,1), filter .6s ease;
 }
 
 .editorial-project-card:hover img {
@@ -386,8 +383,7 @@ a {
   bottom: 16px;
   margin: 0;
   color: #f0ede7;
-  font: 400 clamp(39px, 5vw, 65px)/.9
-    'Cormorant Garamond', serif;
+  font: 400 clamp(39px, 5vw, 65px)/.9 'Cormorant Garamond', serif;
   letter-spacing: -.035em;
 }
 
@@ -475,8 +471,7 @@ a {
 .experience-heading h2,
 .writing-content h2,
 .footer-content h2 {
-  font: 300 clamp(48px, 6vw, 72px)/.9
-    'Cormorant Garamond', serif;
+  font: 300 clamp(48px, 6vw, 72px)/.9 'Cormorant Garamond', serif;
   letter-spacing: -.035em;
   margin: 0;
 }
@@ -714,7 +709,7 @@ a {
 
 /* MOBILE */
 
-@media(max-width: 850px) {
+@media (max-width: 850px) {
   .site {
     padding: 0 20px;
   }
@@ -737,7 +732,7 @@ a {
   }
 }
 
-@media(max-width: 560px) {
+@media (max-width: 560px) {
   .site {
     padding: 0 10px;
   }
@@ -873,7 +868,6 @@ a {
   }
 }
 
-
 /* SHARED ARCHIVE PAGES */
 
 .archive-page {
@@ -890,8 +884,7 @@ a {
 }
 
 .archive-intro h1 {
-  font: 300 clamp(65px, 9vw, 105px)/.9
-    'Cormorant Garamond', serif;
+  font: 300 clamp(65px, 9vw, 105px)/.9 'Cormorant Garamond', serif;
   letter-spacing: -.05em;
   margin: 20px 0;
 }
@@ -1001,315 +994,19 @@ a {
 }
 
 .field-card h2 {
-  font: 400 34px 'Cormorant Garamond', serif;
-  margin: 12px 0 5px;
+  font: 400 32px 'Cormorant Garamond', serif;
+  color: #e6e3dc;
+  margin: 15px 0 8px;
 }
 
-.field-card > p {
-  font-size: 10px;
-  line-height: 1.85;
+.field-card p {
   color: #888;
-  max-width: 450px;
-}
-
-.field-index {
-  display: block;
-  margin-top: 17px;
-  color: #666;
-  font: 7px 'DM Mono', monospace;
-  letter-spacing: .1em;
-}
-
-.empty-state {
-  text-align: center;
-  padding: 70px 20px;
-  color: #777;
-  font: 18px 'Cormorant Garamond', serif;
-}
-
-/* WRITING PAGE */
-
-.writing-banner {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  padding: 25px 0;
-  margin: 0 0 30px;
-  border-bottom: 1px solid #292929;
-  color: #aaa;
-}
-
-.writing-banner > div {
-  flex: 1;
-}
-
-.writing-banner > div span {
-  font: 8px 'DM Mono', monospace;
-  color: #999;
-  letter-spacing: .12em;
-}
-
-.writing-banner p {
-  max-width: 390px;
-  font: 17px/1.4 'Cormorant Garamond', serif;
-  color: #bbb;
-  margin: 8px 0 0;
-}
-
-.writing-banner > a {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font: 8px 'DM Mono', monospace;
-  color: #bbb;
-}
-
-.article-list {
-  border-top: 1px solid #292929;
-}
-
-.article-row {
-  display: grid;
-  grid-template-columns: 45px 1fr 25px;
-  gap: 20px;
-  padding: 30px 5px;
-  border-bottom: 1px solid #292929;
-  transition: background .25s;
-}
-
-.article-row:hover {
-  background: #111;
-}
-
-.article-number {
-  font: 17px 'Cormorant Garamond', serif;
-  color: #777;
-}
-
-.article-meta {
-  display: flex;
-  gap: 18px;
-  font: 8px 'DM Mono', monospace;
-  color: #777;
-  letter-spacing: .08em;
-}
-
-.article-main h2 {
-  font: 400 clamp(26px, 4vw, 38px)
-    'Cormorant Garamond', serif;
-  margin: 12px 0 7px;
-  color: #e2e0da;
-}
-
-.article-main p {
-  font-size: 10px;
-  line-height: 1.8;
-  color: #888;
-  max-width: 550px;
-}
-
-.read-time {
-  display: block;
-  font: 8px 'DM Mono', monospace;
-  color: #666;
-  margin-top: 15px;
-}
-
-.article-arrow {
-  width: 17px;
-  color: #888;
-  transition: transform .25s, color .25s;
-}
-
-.article-row:hover .article-arrow {
-  transform: translate(3px, -3px);
-  color: white;
-}
-
-.writing-empty {
-  text-align: center;
-  padding: 85px 20px;
-  border-bottom: 1px solid #292929;
-  color: #888;
-}
-
-.writing-empty h2 {
-  font: 400 36px 'Cormorant Garamond', serif;
-  color: #ddd;
-}
-
-.writing-empty p {
   font-size: 11px;
   line-height: 1.8;
-  max-width: 350px;
-  margin: 15px auto 25px;
-}
-
-.writing-empty a {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  color: #ddd;
-  border-bottom: 1px solid #666;
-  padding-bottom: 9px;
-  font: 8px 'DM Mono', monospace;
-}
-
-/* ACTIVE NAVIGATION */
-
-.nav-links a.active {
-  color: #fff;
-}
-
-/* MOBILE */
-
-@media(max-width: 650px) {
-  .archive-page {
-    padding: 20px 17px 55px;
-  }
-
-  .archive-intro {
-    padding: 50px 0;
-  }
-
-  .field-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .field-image {
-    height: 230px;
-  }
-
-  .writing-banner {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .writing-banner > div {
-    flex-basis: calc(100% - 55px);
-  }
-
-  .writing-banner > a {
-    margin-left: 46px;
-  }
-
-  .article-row {
-    grid-template-columns: 25px 1fr 17px;
-    gap: 10px;
-  }
-
-  .article-meta {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .archive-toolbar {
-    font-size: 7px;
-  }
-}
-
-
-.manuscript-scene {
-  position: relative;
-  min-height: 430px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.manuscript {
-  position: relative;
-  width: min(340px, 85%);
-  min-height: 330px;
-  padding: 32px;
-  background: #111;
-  border: 1px solid #393939;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
-  transform-origin: center;
-}
-
-.manuscript-label,
-.manuscript-footer {
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: #777;
-}
-
-.manuscript-rule {
-  height: 1px;
-  background: #393939;
-  margin: 22px 0 30px;
-}
-
-.manuscript-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 17px;
-}
-
-.manuscript-lines p {
   margin: 0;
-  color: #d5d2ca;
-  font-family: "Cormorant Garamond", serif;
-  font-size: 21px;
-  font-style: italic;
-  line-height: 1.3;
 }
 
-.manuscript-footer {
-  position: absolute;
-  bottom: 25px;
-  left: 32px;
-  right: 32px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 8px;
-}
-
-.ink-cursor {
-  display: inline-block;
-  width: 1px;
-  height: 19px;
-  margin-left: 5px;
-  background: #d5d2ca;
-  vertical-align: middle;
-  animation: inkBlink 1s steps(2, start) infinite;
-}
-
-.manuscript-orbit {
-  position: absolute;
-  width: 410px;
-  height: 410px;
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 50%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  padding-top: 8px;
-  color: #777;
-  font-family: "DM Mono", monospace;
-  font-size: 8px;
-  letter-spacing: 3px;
-  pointer-events: none;
-}
-
-@keyframes inkBlink {
-  to {
-    visibility: hidden;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ink-cursor {
-    animation: none;
-  }
-}
-
-.writing-archive {
-  margin-top: 90px;
-}
+/* MEDIUM ARTICLES */
 
 .medium-articles {
   display: grid;
@@ -1394,12 +1091,7 @@ a {
   color: #ddd;
 }
 
-@media (max-width: 700px) {
-  .medium-articles {
-    grid-template-columns: 1fr;
-  }
-}
-/* WRITING PAGE — POETRY SECTION FIX */
+/* WRITING PAGE — POETRY SECTION */
 
 .writing-page .poetry-archive-section {
   margin-top: 65px;
@@ -1447,57 +1139,27 @@ a {
   text-decoration: none;
 }
 
+.writing-page .writing-destination-link:hover {
+  color: white;
+  border-color: white;
+}
+
 .writing-page .poetry-visual {
-  min-height: 290px;
+  min-height: 280px;
   border: 1px solid #303030;
-  background: radial-gradient(
-    circle at center,
-    rgba(255,255,255,.055),
-    transparent 75%
-  );
+  background: #111;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 18px;
-  color: #aaa;
 }
 
-.writing-page .poetry-visual span {
-  display: block;
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 2px;
+.writing-page .poetry-visual svg {
   color: #777;
+  width: 65px;
+  height: 65px;
 }
 
-.writing-page .writing-archive {
-  margin-top: 35px;
-}
-
-.writing-page .medium-section-heading h2 {
-  font-family: "Cormorant Garamond", serif;
-  font-size: clamp(42px, 5vw, 62px);
-  font-weight: 400;
-  color: #e6e3dc;
-  margin: 15px 0;
-}
-
-@media (max-width: 700px) {
-  .writing-page .poetry-archive-content {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    padding: 35px 0;
-  }
-
-  .writing-page .poetry-visual {
-    min-height: 220px;
-  }
-}
-
-/* =================================
-   MOBILE NAVIGATION
-================================= */
+/* MOBILE NAVIGATION */
 
 .mobile-menu-toggle,
 .mobile-menu-overlay {
@@ -1544,9 +1206,7 @@ a {
     visibility: hidden;
     opacity: 0;
     pointer-events: none;
-    transition:
-      opacity 0.35s ease,
-      visibility 0.35s ease;
+    transition: opacity 0.35s ease, visibility 0.35s ease;
   }
 
   .mobile-menu-overlay.is-open {
@@ -1652,62 +1312,45 @@ a {
   }
 }
 
-/* THE THRESHOLD — ENVIRONMENT PREVIEW */
+@media (max-width: 700px) {
+  .medium-articles {
+    grid-template-columns: 1fr;
+  }
 
-.intro-preview {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #11110f;
-}
-
-.intro-preview canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.intro-preview-label {
-  position: absolute;
-  top: 28px;
-  left: 32px;
-  right: 32px;
-  display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 1.8px;
-  color: rgba(230, 227, 220, 0.58);
-}
-
-.intro-preview-note {
-  position: absolute;
-  bottom: 28px;
-  left: 32px;
-  pointer-events: none;
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  color: rgba(230, 227, 220, 0.45);
+  .writing-page .poetry-archive-content {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
 }
 
 @media (max-width: 600px) {
-  .intro-preview-label {
-    top: 20px;
-    left: 18px;
-    right: 18px;
-    font-size: 8px;
+  .field-grid {
+    grid-template-columns: 1fr;
   }
 
-  .intro-preview-note {
-    bottom: 20px;
-    left: 18px;
-    font-size: 8px;
+  .archive-page {
+    padding: 25px 18px 55px;
+  }
+
+  .archive-intro {
+    padding: 40px 0 45px;
+  }
+
+  .archive-toolbar {
+    gap: 15px;
+    font-size: 7px;
   }
 }
+
+@media (max-width: 380px) {
+  .mobile-menu-footer {
+    flex-direction: column;
+  }
+}
+
+/* =========================================
+   THE THRESHOLD — CINEMATIC INTRO
+========================================= */
 
 .intro-preview {
   position: fixed;
@@ -1717,7 +1360,9 @@ a {
   height: 100dvh;
   z-index: 99999;
   overflow: hidden;
+  isolation: isolate;
   background: #11110f;
+  color: #e6e3dc;
 }
 
 .intro-preview canvas {
@@ -1726,30 +1371,167 @@ a {
   height: 100%;
 }
 
-.intro-preview-top {
+/* Preview labels */
+
+.intro-preview-top,
+.intro-preview-bottom {
   position: absolute;
+  z-index: 4;
+  pointer-events: none;
+  color: rgba(225, 222, 212, 0.58);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.intro-preview-top {
   top: 28px;
   left: 40px;
   right: 40px;
   display: flex;
   justify-content: space-between;
-  pointer-events: none;
-  color: rgba(225, 222, 212, 0.55);
-  font-family: "DM Mono", monospace;
-  font-size: 9px;
-  letter-spacing: 0.18em;
+  align-items: center;
 }
 
 .intro-preview-bottom {
-  position: absolute;
-  bottom: 30px;
   left: 40px;
+  bottom: 30px;
+}
+
+/* Intro start screen */
+
+.intro-start-screen {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.42),
+    rgba(0, 0, 0, 0.12),
+    rgba(0, 0, 0, 0.42)
+  );
+  color: #e6e3dc;
   pointer-events: none;
-  color: rgba(225, 222, 212, 0.55);
+}
+
+.intro-start-content {
+  width: min(520px, 85%);
+  text-align: center;
+  pointer-events: auto;
+}
+
+.intro-eyebrow {
+  display: block;
+  margin-bottom: 24px;
+  color: rgba(230, 227, 220, 0.6);
   font-family: "DM Mono", monospace;
   font-size: 9px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.24em;
 }
+
+.intro-start-content h1 {
+  margin: 0;
+  color: #e6e3dc;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(42px, 6vw, 76px);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+.intro-start-content p {
+  margin: 24px 0 36px;
+  color: rgba(230, 227, 220, 0.65);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* Begin button */
+
+.intro-start-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 15px 20px;
+  border: 1px solid rgba(230, 227, 220, 0.42);
+  background: rgba(10, 10, 10, 0.45);
+  color: #e6e3dc;
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.intro-start-button:hover {
+  background: rgba(230, 227, 220, 0.12);
+  border-color: #e6e3dc;
+}
+
+.intro-start-button:focus-visible {
+  outline: 1px solid #e6e3dc;
+  outline-offset: 5px;
+}
+
+.intro-button-arrow {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.intro-start-button:hover .intro-button-arrow {
+  transform: translateX(5px);
+}
+
+/* Arrival message */
+
+.intro-arrival {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 100px;
+  width: max-content;
+  max-width: 90%;
+  transform: translateX(-50%);
+  text-align: center;
+  color: #e6e3dc;
+  pointer-events: none;
+  animation: arrivalFade 1.2s ease forwards;
+}
+
+.intro-arrival span {
+  color: rgba(230, 227, 220, 0.65);
+  font-family: "DM Mono", monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+
+.intro-arrival p {
+  margin: 12px 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 26px;
+  font-weight: 400;
+}
+
+@keyframes arrivalFade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Intro mobile */
 
 @media (max-width: 600px) {
   .intro-preview-top {
@@ -1764,16 +1546,44 @@ a {
     bottom: 22px;
     font-size: 8px;
   }
-}
 
+  .intro-start-content {
+    width: 100%;
+  }
 
-@media (max-width: 380px) {
-  .mobile-menu-footer {
-    flex-direction: column;
+  .intro-start-content h1 {
+    font-size: clamp(42px, 12vw, 56px);
+  }
+
+  .intro-start-content p {
+    font-size: 12px;
+  }
+
+  .intro-arrival {
+    bottom: 85px;
+  }
+
+  .intro-arrival p {
+    font-size: 23px;
   }
 }
 
-@media(prefers-reduced-motion: reduce) {
+@media (max-width: 360px) {
+  .intro-preview-top {
+    left: 14px;
+    right: 14px;
+    font-size: 7px;
+  }
+
+  .intro-preview-bottom {
+    left: 14px;
+    font-size: 7px;
+  }
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
