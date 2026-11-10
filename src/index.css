@@ -1580,6 +1580,62 @@ a {
   cursor: default;
 }
 
+/* GALLERY BLACKOUT */
+
+.intro-preview {
+  background: #11110f;
+  transition: background 2s ease;
+}
+
+.intro-preview.intro-blackout {
+  background: #000;
+}
+
+.intro-blackout canvas {
+  opacity: 0;
+  transition: opacity 2s ease;
+}
+
+.intro-blackout .intro-preview-top,
+.intro-blackout .intro-preview-bottom,
+.intro-blackout .intro-arrival {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.intro-blackout-message {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  color: #e6e3dc;
+  font-family: "DM Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.35em;
+  animation: archiveReveal 1.4s ease both;
+}
+
+@keyframes archiveReveal {
+  from {
+    opacity: 0;
+    letter-spacing: 0.6em;
+  }
+
+  to {
+    opacity: 1;
+    letter-spacing: 0.35em;
+  }
+}
+
+@media (max-width: 700px) {
+  .intro-blackout-message {
+    font-size: 9px;
+  }
+}
+
+
 @media (max-width: 360px) {
   .intro-preview-top {
     left: 14px;

@@ -768,145 +768,236 @@ function Lighting({ doorOpened }) {
 
   return (
     <>
-      <ambientLight
-        intensity={doorOpened ? 0.65 : 0.32}
-        color={doorOpened ? "#eee9dc" : "#a9a69d"}
-      />
-
-      <hemisphereLight
-        skyColor="#a9a9a4"
-        groundColor="#242321"
-        intensity={0.35}
-      />
-
-      {/* Corridor overhead light */}
-      <pointLight
-        position={[0, 4.1, 1.8]}
-        intensity={38}
-        distance={11}
-        decay={2}
-        color="#d8d1bd"
-      />
-
-      <pointLight
-        position={[0, 3.2, -5]}
-        intensity={24}
-        distance={8}
-        decay={2}
-        color="#a9aaa5"
-      />
-
-      <pointLight
-        position={[0, 3.5, -9.2]}
-        intensity={doorOpened ? 42 : 16}
-        distance={doorOpened ? 12 : 4}
-        color="#fff0d2"
-      />
-
+      <ambientLight intensity={0.32} color="#a9a69d" />
+      <hemisphereLight skyColor="#a9a9a4" groundColor="#242321" intensity={0.35} />
+      <pointLight position={[0, 4.1, 1.8]} intensity={38} distance={11} decay={2} color="#d8d1bd" />
+      <pointLight position={[0, 3.2, -5]} intensity={24} distance={8} decay={2} color="#a9aaa5" />
+      <pointLight position={[0, 3.5, -9.2]} intensity={doorOpened ? 24 : 16} distance={doorOpened ? 7 : 4} decay={2} color="#d9cfb9" />
       <primitive object={spotlightTarget} />
-
-      <spotLight
-        position={[-1.8, 3.8, 4]}
-        target={spotlightTarget}
-        intensity={18}
-        angle={0.65}
-        penumbra={0.9}
-        distance={18}
-        color="#b9b6a9"
-      />
-
-      <spotLight
-        position={[0, 3.7, -7.2]}
-        target={spotlightTarget}
-        intensity={35}
-        angle={0.48}
-        penumbra={0.9}
-        distance={9}
-        color="#d5cbb5"
-      />
-
-      {/* Interior light */}
-      {doorOpened && (
-        <>
-          <pointLight
-            position={[0, 3.5, -16]}
-            intensity={75}
-            distance={18}
-            decay={2}
-            color="#fff2d9"
-          />
-
-          <pointLight
-            position={[0, 4, -23]}
-            intensity={65}
-            distance={15}
-            decay={2}
-            color="#ffffff"
-          />
-
-          <directionalLight
-            position={[0, 4, -25]}
-            intensity={2.2}
-            color="#fff8e9"
-          />
-        </>
-      )}
+      <spotLight position={[-1.8, 3.8, 4]} target={spotlightTarget} intensity={18} angle={0.65} penumbra={0.9} distance={18} color="#b9b6a9" />
+      <spotLight position={[0, 3.7, -7.2]} target={spotlightTarget} intensity={24} angle={0.48} penumbra={0.9} distance={7} color="#d5cbb5" />
     </>
   );
 }
 
+
 /* ================================================
-   9. INTERIOR BEYOND THE DOOR
+   9. GALLERY ARTWORK
 ================================================ */
 
-function BeyondDoor() {
+const galleryPieces = [
+  { side: -1, z: -13.2, title: "THINGS BUILT", subtitle: "PROJECTS / EXPERIMENTS", type: "project" },
+  { side: 1, z: -14.8, title: "IN GOOD COMPANY", subtitle: "PEOPLE / COMMUNITIES", type: "people" },
+  { side: -1, z: -17.1, title: "THE WORK", subtitle: "IDEAS INTO REALITY", type: "work" },
+  { side: 1, z: -18.7, title: "MILESTONES", subtitle: "RECOGNITION / GROWTH", type: "award" },
+  { side: -1, z: -21, title: "OUT THERE", subtitle: "HACKATHONS / EVENTS", type: "events" },
+  { side: 1, z: -22.6, title: "BEYOND THE SCREEN", subtitle: "WRITING / LIFE", type: "personal" },
+  { side: -1, z: -24.2, title: "STILL BECOMING", subtitle: "THE JOURNEY CONTINUES", type: "final" },
+];
+
+function createGalleryArtwork(title, subtitle, type) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 900;
+  canvas.height = 650;
+
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = "#171714";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Subtle textured background
+  for (let i = 0; i < 12000; i++) {
+    const shade = Math.random() > 0.5 ? 255 : 0;
+    ctx.fillStyle = `rgba(${shade},${shade},${shade},${Math.random() * 0.035})`;
+    ctx.fillRect(Math.random() * 900, Math.random() * 650, 2, 2);
+  }
+
+  // Abstract exhibition artwork
+  const palettes = {
+    project: ["#555b53", "#252a25", "#9b927e"],
+    people: ["#756e62", "#35342f", "#a39b8b"],
+    work: ["#454b48", "#242724", "#858a7d"],
+    award: ["#786e5d", "#302c26", "#b4a78d"],
+    events: ["#5c5148", "#292724", "#a18c73"],
+    personal: ["#514c50", "#292629", "#a59a9a"],
+    final: ["#55564e", "#272923", "#aaa38f"],
+  };
+
+  const colors = palettes[type] || palettes.project;
+
+  const gradient = ctx.createLinearGradient(0, 0, 900, 650);
+  gradient.addColorStop(0, colors[0]);
+  gradient.addColorStop(0.55, colors[1]);
+  gradient.addColorStop(1, colors[2]);
+
+  ctx.fillStyle = gradient;
+  ctx.fillRect(55, 55, 790, 440);
+
+  // Abstract architectural composition
+  ctx.globalAlpha = 0.55;
+  ctx.fillStyle = "#11120f";
+  ctx.fillRect(115, 105, 220, 320);
+  ctx.fillRect(370, 175, 360, 250);
+
+  ctx.strokeStyle = "#c4b99f";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(390, 195, 320, 210);
+
+  ctx.globalAlpha = 0.3;
+  ctx.beginPath();
+  ctx.arc(590, 290, 90, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.globalAlpha = 1;
+
+  // Exhibition typography
+  ctx.fillStyle = "#e6e0d2";
+  ctx.font = "500 25px Arial";
+  ctx.fillText(title, 65, 550);
+
+  ctx.fillStyle = "#aaa69a";
+  ctx.font = "16px monospace";
+  ctx.fillText(subtitle, 65, 585);
+
+  ctx.fillStyle = "#77776e";
+  ctx.font = "13px monospace";
+  ctx.fillText("A.M. / PERSONAL ARCHIVE", 65, 620);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = 8;
+
+  return texture;
+}
+
+function GalleryFrame({ piece }) {
+  const texture = useMemo(
+    () => createGalleryArtwork(piece.title, piece.subtitle, piece.type),
+    [piece.title, piece.subtitle, piece.type]
+  );
+
+  const isLeft = piece.side === -1;
+
   return (
-    <group>
-      {/* Floor */}
-      <mesh position={[0, -0.2, -18]} receiveShadow>
-        <boxGeometry args={[12, 0.4, 16]} />
-        <meshStandardMaterial color="#c5c2b9" roughness={0.88} />
+    <group
+      position={[isLeft ? -5.78 : 5.78, 2.25, piece.z]}
+      rotation={[0, isLeft ? Math.PI / 2 : -Math.PI / 2, 0]}
+    >
+      {/* Dark outer frame */}
+      <mesh castShadow receiveShadow>
+        <boxGeometry args={[2.25, 1.85, 0.12]} />
+        <meshStandardMaterial
+          color="#171815"
+          roughness={0.48}
+          metalness={0.32}
+        />
       </mesh>
 
-      {/* Side walls */}
-      <mesh position={[-6, 2.5, -18]}>
-        <boxGeometry args={[0.3, 5, 16]} />
-        <meshStandardMaterial color="#aaa99f" roughness={0.9} />
+      {/* Inner border */}
+      <mesh position={[0, 0, 0.071]}>
+        <boxGeometry args={[2.08, 1.68, 0.025]} />
+        <meshStandardMaterial color="#77766b" metalness={0.65} roughness={0.55} />
       </mesh>
 
-      <mesh position={[6, 2.5, -18]}>
-        <boxGeometry args={[0.3, 5, 16]} />
-        <meshStandardMaterial color="#aaa99f" roughness={0.9} />
+      {/* Artwork */}
+      <mesh position={[0, 0, 0.09]}>
+        <planeGeometry args={[1.98, 1.58]} />
+        <meshStandardMaterial
+          map={texture}
+          roughness={0.92}
+          metalness={0}
+        />
       </mesh>
 
-      {/* Back wall */}
-      <mesh position={[0, 2.5, -26]}>
-        <boxGeometry args={[12, 5, 0.3]} />
-        <meshStandardMaterial color="#d4d1c8" roughness={0.9} />
+      {/* Small plaque */}
+      <mesh position={[0, -1.08, 0.035]}>
+        <boxGeometry args={[1.6, 0.18, 0.035]} />
+        <meshStandardMaterial color="#292923" roughness={0.8} />
       </mesh>
 
-      {/* Ceiling */}
-      <mesh position={[0, 5, -18]}>
-        <boxGeometry args={[12, 0.3, 16]} />
-        <meshStandardMaterial color="#e0ded5" roughness={0.9} />
-      </mesh>
-
-      {/* Architectural blocks */}
-      <mesh position={[-3.7, 1.1, -19]}>
-        <boxGeometry args={[0.12, 2.2, 3]} />
-        <meshStandardMaterial color="#e1ded4" roughness={0.85} />
-      </mesh>
-
-      <mesh position={[3.8, 1.5, -22]}>
-        <boxGeometry args={[0.12, 3, 2]} />
-        <meshStandardMaterial color="#e1ded4" roughness={0.85} />
-      </mesh>
+      {/* Frame spotlight */}
+      <spotLight
+        position={[0, 1.65, 0.8]}
+        intensity={9}
+        distance={5}
+        angle={0.55}
+        penumbra={0.85}
+        color="#d8c9a9"
+      />
     </group>
   );
 }
 
 /* ================================================
-   10. CAMERA RIG
+   10. GALLERY ROOM
+================================================ */
+
+function GalleryRoom() {
+  return (
+    <group>
+      {/* Dark polished floor */}
+      <mesh position={[0, -0.2, -18]} receiveShadow>
+        <boxGeometry args={[12, 0.4, 17]} />
+        <meshStandardMaterial
+          color="#292925"
+          roughness={0.34}
+          metalness={0.22}
+        />
+      </mesh>
+
+      {/* Left wall */}
+      <mesh position={[-6, 2.5, -18]} receiveShadow>
+        <boxGeometry args={[0.3, 5, 17]} />
+        <meshStandardMaterial color="#34332f" roughness={0.95} />
+      </mesh>
+
+      {/* Right wall */}
+      <mesh position={[6, 2.5, -18]} receiveShadow>
+        <boxGeometry args={[0.3, 5, 17]} />
+        <meshStandardMaterial color="#34332f" roughness={0.95} />
+      </mesh>
+
+      {/* Ceiling */}
+      <mesh position={[0, 5, -18]}>
+        <boxGeometry args={[12, 0.3, 17]} />
+        <meshStandardMaterial color="#22221f" roughness={0.95} />
+      </mesh>
+
+      {/* Back wall */}
+      <mesh position={[0, 2.5, -26.5]}>
+        <boxGeometry args={[12, 5, 0.3]} />
+        <meshStandardMaterial color="#292925" roughness={0.95} />
+      </mesh>
+
+      {/* Structural ceiling beams */}
+      {[-12, -16, -20, -24].map((z) => (
+        <mesh key={z} position={[0, 4.72, z]}>
+          <boxGeometry args={[11.8, 0.18, 0.25]} />
+          <meshStandardMaterial color="#1c1d19" metalness={0.3} />
+        </mesh>
+      ))}
+
+      {/* Gallery frames */}
+      {galleryPieces.map((piece, index) => (
+        <GalleryFrame key={`${piece.type}-${index}`} piece={piece} />
+      ))}
+
+      {/* Central floor lights */}
+      {[-14, -18, -22].map((z) => (
+        <pointLight
+          key={z}
+          position={[0, 3.9, z]}
+          intensity={7}
+          distance={7}
+          color="#b5a98f"
+        />
+      ))}
+    </group>
+  );
+}
+
+/* ================================================
+   11. CAMERA RIG
 ================================================ */
 
 function CameraRig({
@@ -914,6 +1005,7 @@ function CameraRig({
   doorReady,
   onArrive,
   onExit,
+  onGalleryComplete,
 }) {
   const elapsed = useRef(0);
   const completed = useRef(false);
@@ -921,6 +1013,10 @@ function CameraRig({
 
   const exitElapsed = useRef(0);
   const exitCompleted = useRef(false);
+
+  const galleryElapsed = useRef(0);
+  const galleryCompleted = useRef(false);
+  const galleryNotified = useRef(false);
 
   const startPosition = useMemo(
     () => new THREE.Vector3(0, 1.7, 6.5),
@@ -937,39 +1033,33 @@ function CameraRig({
     []
   );
 
-  const lookTarget = useMemo(
-    () => new THREE.Vector3(),
+  const galleryEnd = useMemo(
+    () => new THREE.Vector3(0, 1.7, -24.8),
     []
   );
+
+  const lookTarget = useMemo(() => new THREE.Vector3(), []);
 
   useFrame((state, delta) => {
     const camera = state.camera;
     const safeDelta = Math.min(delta, 0.05);
 
-    // FIRST MOVEMENT: walk through the corridor
+    // FIRST: Walk through the industrial corridor
     if (started && !completed.current) {
       elapsed.current += safeDelta;
 
       const progress = Math.min(elapsed.current / 9, 1);
       const eased = THREE.MathUtils.smoothstep(progress, 0, 1);
 
-      camera.position.lerpVectors(
-        startPosition,
-        endPosition,
-        eased
-      );
+      camera.position.lerpVectors(startPosition, endPosition, eased);
 
       const walkingStrength = Math.sin(progress * Math.PI);
 
       camera.position.y +=
-        Math.sin(elapsed.current * 8) *
-        0.018 *
-        walkingStrength;
+        Math.sin(elapsed.current * 8) * 0.018 * walkingStrength;
 
       camera.position.x +=
-        Math.sin(elapsed.current * 4) *
-        0.009 *
-        walkingStrength;
+        Math.sin(elapsed.current * 4) * 0.009 * walkingStrength;
 
       camera.lookAt(0, 1.6, -9.7);
 
@@ -987,7 +1077,7 @@ function CameraRig({
       return;
     }
 
-    // SECOND MOVEMENT: pass through the open doorway
+    // SECOND: Move through the open doorway
     if (
       doorReady &&
       completed.current &&
@@ -1022,6 +1112,52 @@ function CameraRig({
       return;
     }
 
+    // THIRD: Slowly explore the gallery
+    if (
+      exitCompleted.current &&
+      !galleryCompleted.current
+    ) {
+      galleryElapsed.current += safeDelta;
+
+      const progress = Math.min(galleryElapsed.current / 11, 1);
+      const eased = THREE.MathUtils.smoothstep(progress, 0, 1);
+
+      camera.position.lerpVectors(
+        interiorPosition,
+        galleryEnd,
+        eased
+      );
+
+      // Gentle side-to-side movement to reveal the frames
+      const gallerySway = Math.sin(progress * Math.PI * 4) * 0.7;
+
+      camera.position.x = gallerySway;
+
+      // Alternate attention between the two gallery walls
+      const viewingSide = Math.sin(progress * Math.PI * 4) * 2.2;
+
+      lookTarget.set(
+        viewingSide,
+        2,
+        THREE.MathUtils.lerp(-17, -25, eased)
+      );
+
+      camera.lookAt(lookTarget);
+
+      if (progress >= 1) {
+        galleryCompleted.current = true;
+        camera.position.copy(galleryEnd);
+        camera.lookAt(0, 1.7, -26);
+
+        if (!galleryNotified.current) {
+          galleryNotified.current = true;
+          onGalleryComplete();
+        }
+      }
+
+      return;
+    }
+
     if (completed.current && !doorReady) {
       camera.lookAt(0, 1.6, -9.7);
     }
@@ -1031,7 +1167,45 @@ function CameraRig({
 }
 
 /* ================================================
-   11. COMPLETE SCENE
+   12. LIGHTING
+================================================ */
+
+function InteriorLighting() {
+  return (
+    <>
+      <ambientLight intensity={0.22} color="#c2b9a6" />
+
+      <hemisphereLight
+        skyColor="#6c6b63"
+        groundColor="#171713"
+        intensity={0.18}
+      />
+
+      <pointLight
+        position={[0, 3.5, -14]}
+        intensity={22}
+        distance={12}
+        color="#d1c2a3"
+      />
+
+      <pointLight
+        position={[0, 3.5, -21]}
+        intensity={18}
+        distance={12}
+        color="#c5b89d"
+      />
+
+      <directionalLight
+        position={[-3, 5, -16]}
+        intensity={0.45}
+        color="#e0d5bf"
+      />
+    </>
+  );
+}
+
+/* ================================================
+   13. COMPLETE SCENE
 ================================================ */
 
 function Scene({
@@ -1043,22 +1217,13 @@ function Scene({
   onExit,
   onDoorClick,
   onDoorOpenComplete,
+  onGalleryComplete,
 }) {
   return (
     <>
-      <color
-        attach="background"
-        args={[doorOpened ? "#c9c6bd" : "#11110f"]}
-      />
+      <color attach="background" args={["#11110f"]} />
 
-      <fog
-        attach="fog"
-        args={[
-          doorOpened ? "#c9c6bd" : "#11110f",
-          doorOpened ? 13 : 7,
-          doorOpened ? 38 : 23,
-        ]}
-      />
+      <fog attach="fog" args={["#11110f", 13, 37]} />
 
       <Lighting doorOpened={doorOpened} />
 
@@ -1073,7 +1238,10 @@ function Scene({
       />
 
       <Rubble />
-      <BeyondDoor />
+
+      <GalleryRoom />
+      <InteriorLighting />
+
       <DustParticles />
 
       <CameraRig
@@ -1081,13 +1249,14 @@ function Scene({
         doorReady={doorReady}
         onArrive={onArrive}
         onExit={onExit}
+        onGalleryComplete={onGalleryComplete}
       />
     </>
   );
 }
 
 /* ================================================
-   12. INTRO EXPERIENCE
+   14. INTRO EXPERIENCE
 ================================================ */
 
 export default function IntroPreview() {
@@ -1096,9 +1265,10 @@ export default function IntroPreview() {
   const [doorOpened, setDoorOpened] = useState(false);
   const [doorReady, setDoorReady] = useState(false);
   const [entered, setEntered] = useState(false);
+  const [blackout, setBlackout] = useState(false);
 
   return (
-    <div className="intro-preview">
+    <div className={`intro-preview ${blackout ? "intro-blackout" : ""}`}>
       <Canvas
         shadows
         dpr={[1, 1.5]}
@@ -1114,7 +1284,7 @@ export default function IntroPreview() {
         }}
         onCreated={({ gl }) => {
           gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.05;
+          gl.toneMappingExposure = 0.85;
           gl.outputColorSpace = THREE.SRGBColorSpace;
         }}
       >
@@ -1127,22 +1297,24 @@ export default function IntroPreview() {
           onDoorClick={() => setDoorOpened(true)}
           onDoorOpenComplete={() => setDoorReady(true)}
           onExit={() => setEntered(true)}
+          onGalleryComplete={() => {
+            setBlackout(true);
+            setTimeout(() => {
+              window.location.assign("/");
+            }, 2200);
+          }}
         />
       </Canvas>
 
-      {/* TOP LABELS */}
       <div className="intro-preview-top">
-        <span>ENVIRONMENT STUDY / 003</span>
-        <span>THE THRESHOLD</span>
+        <span>ENVIRONMENT STUDY / 004</span>
+        <span>THE ARCHIVE</span>
       </div>
 
-      {/* START SCREEN */}
       {!started && (
         <div className="intro-start-screen">
           <div className="intro-start-content">
-            <span className="intro-eyebrow">
-              AN INTRODUCTION
-            </span>
+            <span className="intro-eyebrow">AN INTRODUCTION</span>
 
             <h1>
               Every story
@@ -1163,7 +1335,6 @@ export default function IntroPreview() {
         </div>
       )}
 
-      {/* ARRIVAL AT THE DOOR */}
       {arrived && !doorOpened && (
         <div className="intro-arrival">
           <span>YOU'VE MADE IT THIS FAR.</span>
@@ -1171,7 +1342,6 @@ export default function IntroPreview() {
         </div>
       )}
 
-      {/* DOOR OPENING */}
       {doorOpened && !entered && (
         <div className="intro-arrival">
           <span>THE WAY IS OPEN.</span>
@@ -1179,18 +1349,24 @@ export default function IntroPreview() {
         </div>
       )}
 
-      {/* INTERIOR ARRIVAL */}
-      {entered && (
+      {entered && !blackout && (
         <div className="intro-arrival">
-          <span>WELCOME.</span>
-          <p>You've found your way here.</p>
+          <span>THE ARCHIVE.</span>
+          <p>A few things along the way.</p>
         </div>
       )}
 
-      {/* BOTTOM LABEL */}
+      {blackout && (
+        <div className="intro-blackout-message">
+          <span>ASWANTH MADHAV</span>
+        </div>
+      )}
+
       <div className="intro-preview-bottom">
-        {entered
-          ? "STAGE 04 — THE OTHER SIDE"
+        {blackout
+          ? "THE END OF THE INTRODUCTION"
+          : entered
+          ? "STAGE 04 — THE ARCHIVE"
           : doorReady
           ? "STAGE 03 — THE PASSAGE"
           : arrived
@@ -1200,3 +1376,8 @@ export default function IntroPreview() {
     </div>
   );
 }
+
+
+/* ================================================
+   12. INTRO EXPERIENCE
+================================================ */
