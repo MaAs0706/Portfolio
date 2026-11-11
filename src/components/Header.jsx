@@ -86,16 +86,7 @@ export default function Header() {
               <ArrowUpRight size={17} />
             </NavLink>
           ))}
-          <Link
-            className="mobile-replay-intro"
-            to="/intro-preview"
-            tabIndex={menuOpen ? 0 : -1}
-            onClick={() => setMenuOpen(false)}
-          >
-            <Play size={14} />
-            <span>REPLAY THE INTRODUCTION</span>
-            <ArrowUpRight size={16} />
-          </Link>
+          
           <Link
             className="mobile-menu-contact"
             to="/#contact"
