@@ -50,7 +50,7 @@ const projects = [
     image: prosperaImage
       ,
     featured: true,
-    link: profile.github,
+    link: "https://github.com/MaAs0706/maps-scrapper",
   },
   {
   number: "02",
@@ -61,7 +61,7 @@ const projects = [
   tags: ["React", "FastAPI", "MySQL"],
   visual: "nexus",
   image: nexusImage,
-  link: profile.github,
+  link: "https://nexus.mec.ac.in/",
 },
   {
     number: "03",
@@ -73,7 +73,7 @@ const projects = [
     visual: "accesslens",
     image:
       accessImage,
-    link: profile.github,
+    link: "https://github.com/MaAs0706/CanvasAgent",
   },
   {
     number: "04",
@@ -85,7 +85,7 @@ const projects = [
     visual: "atmos",
     image:
       atmosImage,
-    link: profile.github,
+    link: "https://github.com/MaAs0706/FossHack",
   },
 ];
 
