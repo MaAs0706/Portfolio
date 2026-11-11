@@ -1,6 +1,8 @@
 
 import React from "react";
 import IntroPreview from "./components/intro/IntroPreview";
+import nexusImage from "./assets/Nexus.png";
+import prosperaImage from "./assets/prospera.png"
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -43,23 +45,22 @@ const projects = [
       "A lead-generation platform identifying businesses without websites. Validated through real-world usage, reaching 50+ prospects and helping close two paying customers.",
     tags: ["Python", "FastAPI", "Streamlit"],
     visual: "prospera",
-    image:
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=85",
+    image: prosperaImage
+      ,
     featured: true,
     link: profile.github,
   },
   {
-    number: "02",
-    name: "NEXUS",
-    category: "FULL STACK · CAMPUS",
-    description:
-      "A campus event management platform with authentication, venue availability, approval workflows and role-specific dashboards.",
-    tags: ["React", "FastAPI", "MySQL"],
-    visual: "nexus",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1000&q=85",
-    link: profile.github,
-  },
+  number: "02",
+  name: "NEXUS",
+  category: "FULL STACK · CAMPUS",
+  description:
+    "A campus event management platform with authentication, venue availability, approval workflows and role-specific dashboards.",
+  tags: ["React", "FastAPI", "MySQL"],
+  visual: "nexus",
+  image: nexusImage,
+  link: profile.github,
+},
   {
     number: "03",
     name: "AccessLens",
