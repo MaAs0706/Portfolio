@@ -4,6 +4,7 @@ import IntroPreview from "./components/intro/IntroPreview";
 import nexusImage from "./assets/Nexus.png";
 import prosperaImage from "./assets/prospera.png"
 import atmosImage from "./assets/foss.png"
+import accessImage from "./assets/access.png"
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -71,7 +72,7 @@ const projects = [
     tags: ["React", "Supabase", "Groq"],
     visual: "accesslens",
     image:
-      "https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1000&q=85",
+      accessImage,
     link: profile.github,
   },
   {
