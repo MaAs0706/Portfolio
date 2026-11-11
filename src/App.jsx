@@ -3,6 +3,7 @@ import React from "react";
 import IntroPreview from "./components/intro/IntroPreview";
 import nexusImage from "./assets/Nexus.png";
 import prosperaImage from "./assets/prospera.png"
+import atmosImage from "./assets/foss.png"
 import { motion } from "framer-motion";
 import {
   ArrowUpRight,
@@ -82,7 +83,7 @@ const projects = [
     tags: ["FastAPI", "React", "Leaflet"],
     visual: "atmos",
     image:
-      "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=1000&q=85",
+      atmosImage,
     link: profile.github,
   },
 ];

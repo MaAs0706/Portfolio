@@ -339,7 +339,7 @@ a {
   height: 100%;
   display: block;
   object-fit: cover;
-  filter: grayscale(100%) brightness(.65) contrast(1.05);
+  
   transition: transform .8s cubic-bezier(.2,.7,.2,1), filter .6s ease;
 }
 
