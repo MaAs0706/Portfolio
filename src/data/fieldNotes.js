@@ -32,6 +32,7 @@ export const fieldNotes = [
   },
 ];
 
+
 export const fieldCategories = [
   "ALL",
   "HACKATHONS",
