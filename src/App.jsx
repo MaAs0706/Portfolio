@@ -214,7 +214,7 @@ function Hero() {
           </h1>
 
           <p className="intro-description">
-            I'm Aswanth Madhav — a computer science student,
+            I'm Aswanth Madhav . A computer science student,
             builder and storyteller. I build products, explore
             technology and occasionally try to make sense of
             the world through words.
