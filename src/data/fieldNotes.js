@@ -51,9 +51,9 @@ export const fieldNotes = [
 
   },
   {
-   id: "Codex",
+   id: "Codex-meetup-hackathon ",
    name:"Codex Meetup Hackathon",
-   type:"HACKATHON",
+   type:"HACKATHONS",
    year:"2026",
    location:"Kochi,India",
    description:"A codex Hackathon held at TinkerSpace Calicut.I Made a extension which you can use on your website , youc an select the area where you want to amake aui change and the Ai finds its source code and makes that change",
