@@ -30,6 +30,16 @@ export const fieldNotes = [
       "Hosted the event, bringing speakers and ideas together on stage.",
     image: "/images/tedxmec.jpg",
   },
+  {
+   id: "foss",
+   name:"India Foss Meetup",
+   type:"CONFERENCES",
+   year:"2025",
+   location:"Bangalore,India",
+   description:"Attended the India Foss Meetup that was held in Bangalore.That was the first time that I stepped into or got a peek into the world of Open Source.",
+   image:""
+
+  },
 ];
 
 
