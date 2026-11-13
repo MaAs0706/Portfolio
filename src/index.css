@@ -2013,6 +2013,44 @@ a {
     height: 210px;
   }
 }
+/* FIELD NOTES — FIX LINK TYPOGRAPHY */
+
+.field-card .field-index,
+.field-card > a:last-child,
+.field-card a.field-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 14px;
+  padding-bottom: 5px;
+
+  color: #aaa69c;
+  font-family: "DM Mono", monospace;
+  font-size: 8px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  border-bottom: 1px solid #353535;
+  background: transparent;
+}
+
+.field-card .field-index:hover,
+.field-card > a:last-child:hover,
+.field-card a.field-link:hover {
+  color: #e6e3dc;
+  border-color: #aaa69c;
+}
+
+/* Keep card descriptions separate from links */
+.field-card > p {
+  margin-bottom: 0;
+  font-size: 11px;
+  line-height: 1.85;
+  color: #888;
+}
 
 @media (max-width: 420px) {
   .writing-page .archive-intro h1 {
