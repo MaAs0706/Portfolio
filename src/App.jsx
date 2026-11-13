@@ -31,7 +31,7 @@ const profile = {
   github: "https://github.com/MaAs0706",
   linkedin: "https://www.linkedin.com/in/aswanth-madhav-323992322/",
   medium: "https://medium.com/@aswanthmadhav07",
-  email: "hello@example.com", // Replace with your email
+  email: "aswanthmadhav07@gmail.com", 
 };
 
 /* --------------------------------
