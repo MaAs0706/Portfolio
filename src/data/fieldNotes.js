@@ -23,7 +23,7 @@ export const fieldNotes = [
   {
     id: "tedxmec",
     name: "TEDxMEC",
-    type: "EVENT HOSTING",
+    type: "EXTRAS",
     year: "2025",
     location: "Kochi, India",
     description:
@@ -39,4 +39,5 @@ export const fieldCategories = [
   "CONFERENCES",
   "MENTORSHIP",
   "COMMUNITY",
+  "EXTRAS"
 ];
